@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53414667592",
+    "project_id": "numad22sp-moviereviewerdedj",
+    "storage_bucket": "numad22sp-moviereviewerdedj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53414667592:android:a50d412ca37550c0ea3f7d",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.numad22sp_moviereviewer_teamdedj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53414667592-6ltanuubuop0ie74qs4cah6s8d12ulqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6QWg-LDwmOl5CFiLdrwD74o1p4v7CWSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53414667592-6ltanuubuop0ie74qs4cah6s8d12ulqj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
