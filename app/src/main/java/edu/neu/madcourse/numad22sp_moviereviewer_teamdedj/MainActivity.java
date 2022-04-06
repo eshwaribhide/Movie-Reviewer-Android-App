@@ -23,31 +23,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginButtonOnClick(View view) {
+        Intent intent = new Intent(this, ProfilePageActivity.class);
+        startActivity(intent);
 
-        /////////////////This dialog is for login/////////////////
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Login");
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText editUsername = new EditText(this);
-        editUsername.setHint("Enter Username");
-        layout.addView(editUsername);
-
-        editUsername.setTextColor(Color.parseColor("#9C27B0"));
-
-        alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            // Would go to Feed screen
-        });
-
-        alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        alertDialog.show();
+//        /////////////////This dialog is for login/////////////////
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setTitle("Login");
+//
+//        LinearLayout layout = new LinearLayout(this);
+//        layout.setOrientation(LinearLayout.VERTICAL);
+//
+//        final EditText editUsername = new EditText(this);
+//        editUsername.setHint("Enter Username");
+//        layout.addView(editUsername);
+//
+//        editUsername.setTextColor(Color.parseColor("#9C27B0"));
+//
+//        alertDialogBuilder.setView(layout);
+//        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
+//            // Would go to Feed screen
+//        });
+//
+//        alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
+//        });
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//        alertDialog.show();
 
     }
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setView(layout);
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
             // Would go to Feed screen
+            // If username is taken need to display an error
         });
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
