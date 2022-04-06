@@ -38,8 +38,12 @@ public class MainActivity extends AppCompatActivity {
         editUsername.setTextColor(Color.parseColor("#9C27B0"));
 
         alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            // Would go to Feed screen
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent homePageIntent = new Intent(MainActivity.this, HomePage.class);
+                startActivity(homePageIntent);
+            }
         });
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
@@ -92,8 +96,12 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(dramaCheckBox);
 
         alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            // Would go to Feed screen
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent homePageIntent = new Intent(MainActivity.this, HomePage.class);
+                startActivity(homePageIntent);
+            }
         });
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {

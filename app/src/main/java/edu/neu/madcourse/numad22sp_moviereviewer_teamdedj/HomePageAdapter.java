@@ -48,7 +48,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.Movies
         // this is a dummy image; will change this
         holder.moviePoster.setImageResource(R.drawable.movie);
         holder.movieTitle.setText(currentMovie.title);
-        holder.reviewCount.setText(currentMovie.reviewCount + "reviews");
+        holder.reviewCount.setText(currentMovie.reviewCount + " reviews");
     }
 
     @Override
