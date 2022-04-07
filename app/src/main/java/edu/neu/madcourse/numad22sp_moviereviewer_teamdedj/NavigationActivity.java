@@ -19,4 +19,9 @@ public class NavigationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void reviewMoviesOnClick(View view) {
+        Intent intent = new Intent(this, MovieListActivity.class);
+        startActivity(intent);
+    }
+
 }
