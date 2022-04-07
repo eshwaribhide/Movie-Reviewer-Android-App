@@ -28,6 +28,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Things to be done
+// Right now it's a search input box and search button. could initially start with a recyclerview
+// of top movies for the user, based on the genre, or just something we pull from the API, and then
+// search input box and button can be in the top corner
 public class MovieListActivity extends AppCompatActivity {
     private static final String TAG = "MovieListActivity";
     private RecyclerView recyclerView;
@@ -77,13 +81,6 @@ public class MovieListActivity extends AppCompatActivity {
         searchInputBox.setHint("Search for Movie");
         movieSearchButton = findViewById(R.id.moviesearch_btn);
         spinner.setVisibility(View.GONE);
-
-        // can be edited later if this is moved to a different position, like top right
-        // then what will need to be done is recycler view will be cleared
-        if (moviesSearched) {
-            movieSearchButton.setVisibility(View.GONE);
-            searchInputBox.setVisibility(View.GONE);
-        }
     }
 
     private void initData(Bundle savedInstanceState) {
@@ -115,6 +112,10 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void addMovieToRecyclerView(String imageURL, String movieTitle, String movieReleaseDate) {
+        // For search box clear need to refresh RecyclerView
+        if (MovieItems.size() == 0) {
+            generateRecyclerView();
+        }
         recyclerViewLayoutManager.smoothScrollToPosition(recyclerView, null, 0);
         MovieItems.add(0, new MovieListActivity.MovieItem(imageURL, movieTitle, movieReleaseDate));
         recyclerViewAdapter.notifyItemInserted(0);
@@ -162,6 +163,10 @@ public class MovieListActivity extends AppCompatActivity {
         if (searchInputBox.getText().toString().matches("")) {
             Snackbar.make(view, "Please Enter Movie Title", BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
+            // For search box clear need to refresh RecyclerView
+            if (MovieItems.size() > 0) {
+                MovieItems = new ArrayList<>();
+            }
             moviesSearched = true;
             spinner.setVisibility(View.VISIBLE);
             String movieName = searchInputBox.getText().toString();
@@ -208,8 +213,6 @@ public class MovieListActivity extends AppCompatActivity {
                     Snackbar.make(view, "Failed with JSONException", BaseTransientBottomBar.LENGTH_LONG).show();
                 }
                 textHandler.post(() -> spinner.setVisibility(View.GONE));
-                textHandler.post(() -> searchInputBox.setVisibility(View.GONE));
-                textHandler.post(() -> movieSearchButton.setVisibility(View.GONE));
             });
             thread.start();
         }
