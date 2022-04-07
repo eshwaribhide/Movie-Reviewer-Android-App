@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -34,6 +36,9 @@ public class MovieListActivity extends AppCompatActivity {
     private ArrayList<MovieListActivity.MovieItem> MovieItems = new ArrayList<>();
     private Handler textHandler = new Handler();
     private ProgressBar spinner;
+    private EditText searchInputBox;
+    private Button movieSearchButton;
+    private boolean moviesSearched = false;
 
 
     public static class MovieItem {
@@ -68,12 +73,24 @@ public class MovieListActivity extends AppCompatActivity {
         initSavedInstanceState(savedInstanceState);
 
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        searchInputBox = findViewById(R.id.searchInputBox);
+        searchInputBox.setHint("Search for Movie");
+        movieSearchButton = findViewById(R.id.moviesearch_btn);
         spinner.setVisibility(View.GONE);
+
+        // can be edited later if this is moved to a different position, like top right
+        // then what will need to be done is recycler view will be cleared
+        if (moviesSearched) {
+            movieSearchButton.setVisibility(View.GONE);
+            searchInputBox.setVisibility(View.GONE);
+        }
     }
 
     private void initData(Bundle savedInstanceState) {
 
         if (savedInstanceState != null && savedInstanceState.containsKey("LengthMovieItems")) {
+            moviesSearched = savedInstanceState.getBoolean("MoviesSearched");
+
 
             if (MovieItems == null || MovieItems.size() == 0) {
                 int size = savedInstanceState.getInt("LengthMovieItems");
@@ -128,6 +145,7 @@ public class MovieListActivity extends AppCompatActivity {
             size = MovieItems.size();
         }
         outState.putInt("LengthMovieItems", size);
+        outState.putBoolean("MoviesSearched", moviesSearched);
 
         for (int i = 0; i < size; i++) {
             int keyInt = i + 1;
@@ -141,8 +159,13 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     public void searchButtonOnClick(View view) {
+        if (searchInputBox.getText().toString().matches("")) {
+            Snackbar.make(view, "Please Enter Movie Title", BaseTransientBottomBar.LENGTH_LONG).show();
+        } else {
+            moviesSearched = true;
             spinner.setVisibility(View.VISIBLE);
-            String urlStr = "https://api.themoviedb.org/3/search/movie?api_key=eea1a7fc0d5c72b36736e248dc5e2693&language=en-US&query=batman&include_adult=false";
+            String movieName = searchInputBox.getText().toString();
+            String urlStr = "https://api.themoviedb.org/3/search/movie?api_key=eea1a7fc0d5c72b36736e248dc5e2693&language=en-US&query=" + movieName + "&include_adult=false";
             Thread thread = new Thread(() -> {
                 JSONObject jObject = new JSONObject();
                 try {
@@ -158,15 +181,15 @@ public class MovieListActivity extends AppCompatActivity {
                     jObject = new JSONObject(resp);
                     Log.e("RESPONSE", String.valueOf(jObject));
                     JSONArray jArray = jObject.getJSONArray("results");
-                        for (int i = 0; i < Math.min(5, jArray.length()); i++) {
-                            JSONObject result = jArray.getJSONObject(i);
-                            String posterPath = result.getString("poster_path");
-                            String movieTitle = result.getString("original_title");
-                            String releaseDate = "Released: " + result.getString("release_date");
-                            Log.e("POSTER PATH", posterPath);
-                            Log.e("MOVIE TITLE", movieTitle);
-                            textHandler.post(() -> addMovieToRecyclerView("https://image.tmdb.org/t/p/original" + posterPath, movieTitle, releaseDate));
-                }
+                    for (int i = 0; i < Math.min(5, jArray.length()); i++) {
+                        JSONObject result = jArray.getJSONObject(i);
+                        String posterPath = result.getString("poster_path");
+                        String movieTitle = result.getString("original_title");
+                        String releaseDate = "Released: " + result.getString("release_date");
+                        Log.e("POSTER PATH", posterPath);
+                        Log.e("MOVIE TITLE", movieTitle);
+                        textHandler.post(() -> addMovieToRecyclerView("https://image.tmdb.org/t/p/original" + posterPath, movieTitle, releaseDate));
+                    }
 
 
                 } catch (MalformedURLException e) {
@@ -187,8 +210,10 @@ public class MovieListActivity extends AppCompatActivity {
                     Snackbar.make(view, "Failed with JSONException", BaseTransientBottomBar.LENGTH_LONG).show();
                 }
                 textHandler.post(() -> spinner.setVisibility(View.GONE));
-                // search bar and text box go away
+                textHandler.post(() -> searchInputBox.setVisibility(View.GONE));
+                textHandler.post(() -> movieSearchButton.setVisibility(View.GONE));
             });
             thread.start();
         }
+    }
 }

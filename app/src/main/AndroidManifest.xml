@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".MovieListActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".NavigationActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
