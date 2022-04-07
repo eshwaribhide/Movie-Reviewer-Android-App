@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             // If username is taken need to display an error
                 Intent intent = new Intent(this, NavigationActivity.class);
                 startActivity(intent);
-
         });
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
