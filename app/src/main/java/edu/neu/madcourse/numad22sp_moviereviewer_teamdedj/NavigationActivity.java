@@ -21,6 +21,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void feedPageOnClick(View view) {
         Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
     }
 
     public void reviewMoviesOnClick(View view) {
