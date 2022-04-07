@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +33,7 @@ public class MovieListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ArrayList<MovieListActivity.MovieItem> MovieItems = new ArrayList<>();
     private Handler textHandler = new Handler();
+    private ProgressBar spinner;
 
 
     public static class MovieItem {
@@ -64,6 +66,9 @@ public class MovieListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
         initSavedInstanceState(savedInstanceState);
+
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
     }
 
     private void initData(Bundle savedInstanceState) {
@@ -136,6 +141,7 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     public void searchButtonOnClick(View view) {
+            spinner.setVisibility(View.VISIBLE);
             String urlStr = "https://api.themoviedb.org/3/search/movie?api_key=eea1a7fc0d5c72b36736e248dc5e2693&language=en-US&query=batman&include_adult=false";
             Thread thread = new Thread(() -> {
                 JSONObject jObject = new JSONObject();
@@ -152,7 +158,6 @@ public class MovieListActivity extends AppCompatActivity {
                     jObject = new JSONObject(resp);
                     Log.e("RESPONSE", String.valueOf(jObject));
                     JSONArray jArray = jObject.getJSONArray("results");
-                    // min of array length and 5
                         for (int i = 0; i < Math.min(5, jArray.length()); i++) {
                             JSONObject result = jArray.getJSONObject(i);
                             String posterPath = result.getString("poster_path");
@@ -181,7 +186,8 @@ public class MovieListActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Snackbar.make(view, "Failed with JSONException", BaseTransientBottomBar.LENGTH_LONG).show();
                 }
-                //textHandler.post(() -> spinner.setVisibility(View.GONE));
+                textHandler.post(() -> spinner.setVisibility(View.GONE));
+                // search bar and text box go away
             });
             thread.start();
         }
