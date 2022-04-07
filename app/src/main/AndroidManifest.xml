@@ -10,8 +10,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD22Sp_MovieReviewer_TeamDEDJ">
         <activity
+<<<<<<< HEAD
             android:name=".HomePage"
             android:exported="false" />
+=======
+            android:name=".NavigationActivity"
+            android:parentActivityName=".MainActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".ProfilePageActivity"
+            android:parentActivityName=".NavigationActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+>>>>>>> 68b779f0cf09160b15322ab36e215730782f5ce9
         <activity
             android:name=".MainActivity"
             android:exported="true">

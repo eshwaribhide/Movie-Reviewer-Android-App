@@ -10,7 +10,7 @@
         android:id="@+id/signup"
         android:layout_width="202dp"
         android:layout_height="43dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:onClick="signUpButtonOnClick"
         android:text="Sign Up"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/hello"
-        android:layout_width="140dp"
-        android:layout_height="106dp"
+        android:layout_width="160dp"
+        android:layout_height="129dp"
 
         android:layout_marginTop="64dp"
         android:src="@drawable/movie"
