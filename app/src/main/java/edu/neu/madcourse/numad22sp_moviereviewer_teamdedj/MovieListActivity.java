@@ -183,12 +183,10 @@ public class MovieListActivity extends AppCompatActivity {
                     JSONArray jArray = jObject.getJSONArray("results");
                     for (int i = 0; i < Math.min(5, jArray.length()); i++) {
                         JSONObject result = jArray.getJSONObject(i);
-                        String posterPath = result.getString("poster_path");
-                        String movieTitle = result.getString("original_title");
-                        String releaseDate = "Released: " + result.getString("release_date");
-                        Log.e("POSTER PATH", posterPath);
-                        Log.e("MOVIE TITLE", movieTitle);
-                        textHandler.post(() -> addMovieToRecyclerView("https://image.tmdb.org/t/p/original" + posterPath, movieTitle, releaseDate));
+                        String posterPath = result.getString("poster_path").contains("/") ? "https://image.tmdb.org/t/p/original" + result.getString("poster_path") : "https://i.imgur.com/HGjprLt.jpeg";
+                        String movieTitle = !result.getString("original_title").equals("") ? result.getString("original_title") : "No Title";
+                        String releaseDate = !result.getString("release_date").equals("") ? "Released: " + result.getString("release_date") : "No Release Date";
+                        textHandler.post(() -> addMovieToRecyclerView(posterPath, movieTitle, releaseDate));
                     }
 
 
