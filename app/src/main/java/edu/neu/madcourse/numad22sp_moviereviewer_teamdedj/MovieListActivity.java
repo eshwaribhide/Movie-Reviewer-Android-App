@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -28,10 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Things to be done
-// Right now it's a search input box and search button. could initially start with a recyclerview
-// of top movies for the user, based on the genre, or just something we pull from the API, and then
-// search input box and button can be in the top corner
 public class MovieListActivity extends AppCompatActivity {
     private static final String TAG = "MovieListActivity";
     private RecyclerView recyclerView;
@@ -41,7 +36,6 @@ public class MovieListActivity extends AppCompatActivity {
     private Handler textHandler = new Handler();
     private ProgressBar spinner;
     private EditText searchInputBox;
-    private Button movieSearchButton;
     private boolean moviesSearched = false;
 
 
@@ -78,9 +72,7 @@ public class MovieListActivity extends AppCompatActivity {
 
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         searchInputBox = findViewById(R.id.searchInputBox);
-        searchInputBox.setHint("Search for Movie");
-        movieSearchButton = findViewById(R.id.moviesearch_btn);
-        spinner.setVisibility(View.GONE);
+        searchInputBox.setHint("Search By Movie Name");
     }
 
     private void initData(Bundle savedInstanceState) {
