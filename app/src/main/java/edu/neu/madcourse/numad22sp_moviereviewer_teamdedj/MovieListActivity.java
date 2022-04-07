@@ -71,6 +71,7 @@ public class MovieListActivity extends AppCompatActivity {
         initSavedInstanceState(savedInstanceState);
 
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
         searchInputBox = findViewById(R.id.searchInputBox);
         searchInputBox.setHint("Search By Movie Name");
     }
