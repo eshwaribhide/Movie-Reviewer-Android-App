@@ -29,4 +29,9 @@ public class NavigationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void leaderboardOnClick(View view) {
+        Intent intent = new Intent(this, LeaderboardActivity.class);
+        startActivity(intent);
+    }
+
 }

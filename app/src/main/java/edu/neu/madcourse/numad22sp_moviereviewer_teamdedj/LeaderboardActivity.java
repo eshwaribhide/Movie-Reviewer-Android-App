@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class LeaderboardActivity extends AppCompatActivity {
-    private static final String TAG = "MovieListActivity";
+    private static final String TAG = "LeaderboardActivity";
     private RecyclerView recyclerView;
     private LeaderboardRecyclerViewAdapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     // private ArrayList<LeaderboardActivity.LeaderboardItem> userItems = new ArrayList<>();
 
@@ -61,6 +62,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.leaderboardRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        leaderboardItems.sort((Comparator.comparing(LeaderboardItem::getUserReviewCount)).reversed());
+
+        recyclerViewAdapter = new LeaderboardRecyclerViewAdapter(LeaderboardActivity.this, leaderboardItems);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
     }
 }
