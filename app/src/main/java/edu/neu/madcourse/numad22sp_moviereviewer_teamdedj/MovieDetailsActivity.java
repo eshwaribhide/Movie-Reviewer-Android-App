@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -97,8 +99,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 // order to have association
                 mDatabase.child("movies").child(movieID).child("reviews").child(date).setValue(date);
 
-                // increment user review count
                 mDatabase.child("users").child(currentUser).child("reviews").child(date).setValue(date);
+
+                // increment user review count and then update the badge status
+                mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        int reviewCount = Integer.parseInt(String.valueOf(task.getResult().child("reviewCount").getValue()));
+                        int newReviewCount = reviewCount + 1;
+                        if (newReviewCount >=10) {
+                            if (newReviewCount >=20) {
+                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("silver");
+                            }
+                            else {
+                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("gold");
+                            }
+                        }
+                        mDatabase.child("users").child(currentUser).child("reviewCount").setValue(newReviewCount);
+                    }
+                });
             });
         });
 
@@ -110,4 +130,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         alertDialog.show();
 }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Bundle b = new Bundle();
+                b.putString("currentUser", currentUser);
+                Log.e("HISTORYCURRENTUSER", currentUser);
+                Intent intent = new Intent();
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

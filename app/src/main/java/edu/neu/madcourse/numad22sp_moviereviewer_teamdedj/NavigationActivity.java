@@ -67,4 +67,16 @@ public class NavigationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 2404) {
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+                finish();
+                startActivity(getIntent());
+            }
+        }
+    }
+
 }
