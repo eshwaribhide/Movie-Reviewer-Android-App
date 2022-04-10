@@ -2,6 +2,8 @@ package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,20 +17,46 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-// need username
+// get from db and then update
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private String currentUser;
     private String movieID;
+
+    private RecyclerView recyclerView;
+    private MovieDetailsRecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private ArrayList<MovieDetailsActivity.ReviewItem> ReviewItems = new ArrayList<>();
+
+    public static class ReviewItem {
+        private final String reviewTitle;
+        private final String reviewContent;
+
+
+        public ReviewItem(String reviewTitle, String reviewContent) {
+            this.reviewTitle = reviewTitle;
+            this.reviewContent = reviewContent;
+        }
+
+        public String getreviewTitle() {
+            return reviewTitle;
+        }
+
+        public String getreviewContent() {
+            return reviewContent;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +65,40 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         getIncomingIntent();
+
+        generateRecyclerView();
+
+        mDatabase.child("reviews").get().addOnCompleteListener(t -> {
+            if (!t.isSuccessful()) {
+                Log.e("firebase", "Error getting data", t.getException());
+            } else {
+                for (DataSnapshot dschild : t.getResult().getChildren()) {
+                    String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
+                    String reviewContent = String.valueOf(dschild.child("reviewContent").getValue()) + "\n" + "~Reviewed By: " + dschild.child("username").getValue() + " on " + dschild.getKey();;
+                    addReviewItemToRecyclerView(reviewTitle, reviewContent);
+                }
+
+            }});
+        }
+
+    private void addReviewItemToRecyclerView(String reviewTitle, String reviewContent) {
+        recyclerViewLayoutManager.smoothScrollToPosition(recyclerView, null, 0);
+        ReviewItems.add(0, new MovieDetailsActivity.ReviewItem(reviewTitle, reviewContent));
+        recyclerViewAdapter.notifyItemInserted(0);
     }
+
+    private void generateRecyclerView() {
+        recyclerViewLayoutManager = new LinearLayoutManager(this);
+        recyclerView = findViewById(R.id.recyclerViewMovieDetails);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerViewAdapter = new MovieDetailsRecyclerViewAdapter(this, ReviewItems);
+
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+
+    }
+
 
     private void getIncomingIntent() {
         if(getIntent().hasExtra("currentUser") && getIntent().hasExtra("movie_id") && getIntent().hasExtra("movie_title") && getIntent().hasExtra("movie_poster")
@@ -78,6 +139,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+        final EditText editReviewTitle = new EditText(this);
+        editReviewTitle.setHint("Enter Review Title");
+        layout.addView(editReviewTitle);
+
         final EditText editReview = new EditText(this);
         editReview.setHint("Write Review");
         layout.addView(editReview);
@@ -93,7 +158,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     mDatabase.child("movies").child(movieID).setValue(movieID);
                 }
                 // storing review content in a child node with review ID of date
-                mDatabase.child("reviews").child(date).setValue(new Review(currentUser, editReview.getText().toString()));
+                mDatabase.child("reviews").child(date).setValue(new Review(currentUser, editReviewTitle.getText().toString(), editReview.getText().toString()));
 
                 // storing review ID for the movie review belongs to and user who made the review in
                 // order to have association

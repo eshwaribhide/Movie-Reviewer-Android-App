@@ -27,6 +27,13 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 
 // can expand genres later, need to add more checkboxes
+
+// Things that need to be done
+// 1. Expand genres
+// 2. Add followers so this can be in feed
+// 3. Make leaderboard dynamic
+// 4. Display reviews design poster gets cut off
+// 5. Theaters near me
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;

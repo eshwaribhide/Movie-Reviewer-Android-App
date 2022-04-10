@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100">
+
+
     <ImageView
         android:id="@+id/movie_details_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="61dp"
         android:layout_weight="50"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,5 +42,10 @@
         android:layout_height="wrap_content"
         android:onClick="reviewMovieBtnOnClick"
         android:text="Review This Movie" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMovieDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
