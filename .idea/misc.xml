@@ -4,8 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_leaderboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_movie_details.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_navigation.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_profile_page.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_theater_list.xml" value="0.14108409321175278" />
+        <entry key="app/src/main/res/layout/leaderboard_card.xml" value="0.1" />
         <entry key="app/src/main/res/layout/movie_card.xml" value="0.375" />
         <entry key="app/src/main/res/layout/movie_item.xml" value="0.125" />
       </map>
