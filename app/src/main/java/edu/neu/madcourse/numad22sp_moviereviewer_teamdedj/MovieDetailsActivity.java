@@ -19,8 +19,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void getIncomingIntent() {
-        if(getIntent().hasExtra("movie_title") && getIntent().hasExtra("movie_poster")
+        if(getIntent().hasExtra("movie_id") && getIntent().hasExtra("movie_title") && getIntent().hasExtra("movie_poster")
                 && getIntent().hasExtra("movie_release_date") && getIntent().hasExtra("movie_description")) {
+            // add when a review is made
+            String movieID = getIntent().getStringExtra("movie_id");
             String movieTitle = getIntent().getStringExtra("movie_title");
             String moviePoster = getIntent().getStringExtra("movie_poster");
             String movieReleaseDate = getIntent().getStringExtra("movie_release_date");

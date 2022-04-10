@@ -40,17 +40,22 @@ public class MovieListActivity extends AppCompatActivity {
 
 
     public static class MovieItem {
+        private final String movieID;
         private final String moviePoster;
         private final String movieTitle;
         private final String movieReleaseDate;
         private final String movieDescription;
 
 
-        public MovieItem(String moviePoster, String movieTitle, String movieReleaseDate, String movieDescription) {
+        public MovieItem(String movieID, String moviePoster, String movieTitle, String movieReleaseDate, String movieDescription) {
+            this.movieID = movieID;
             this.moviePoster = moviePoster;
             this.movieTitle = movieTitle;
             this.movieReleaseDate = movieReleaseDate;
             this.movieDescription = movieDescription;
+        }
+        public String getMovieID() {
+            return movieID;
         }
 
         public String getMoviePoster() {
@@ -93,12 +98,13 @@ public class MovieListActivity extends AppCompatActivity {
                 for (int i = 0; i < size; i++) {
                     int keyInt = i + 1;
                     String key = Integer.toString(keyInt);
+                    String movieID = savedInstanceState.getString("MovieIDKey"+ key);
                     String moviePoster = savedInstanceState.getString("MoviePosterKey"+ key);
                     String movieTitle = savedInstanceState.getString("MovieTitleKey" + key);
                     String movieReleaseDate = savedInstanceState.getString("MovieReleaseDateKey" + key);
                     String movieDescription = savedInstanceState.getString("MovieDescription" + key);
 
-                    MovieListActivity.MovieItem MovieItem = new MovieListActivity.MovieItem(moviePoster, movieTitle, movieReleaseDate, movieDescription);
+                    MovieListActivity.MovieItem MovieItem = new MovieListActivity.MovieItem(movieID, moviePoster, movieTitle, movieReleaseDate, movieDescription);
 
                     MovieItems.add(MovieItem);
                 }
@@ -109,14 +115,14 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
-    private void addMovieToRecyclerView(String imageURL, String movieTitle, String movieReleaseDate,
+    private void addMovieToRecyclerView(String movieID, String imageURL, String movieTitle, String movieReleaseDate,
                                         String movieDescription) {
         // For search box clear need to refresh RecyclerView
         if (MovieItems.size() == 0) {
             generateRecyclerView();
         }
         recyclerViewLayoutManager.smoothScrollToPosition(recyclerView, null, 0);
-        MovieItems.add(0, new MovieListActivity.MovieItem(imageURL, movieTitle, movieReleaseDate, movieDescription));
+        MovieItems.add(0, new MovieListActivity.MovieItem(movieID, imageURL, movieTitle, movieReleaseDate, movieDescription));
         recyclerViewAdapter.notifyItemInserted(0);
     }
 
@@ -150,6 +156,7 @@ public class MovieListActivity extends AppCompatActivity {
         for (int i = 0; i < size; i++) {
             int keyInt = i + 1;
             String key = Integer.toString(keyInt);
+            outState.putString("MovieIDKey" + key, MovieItems.get(i).getMovieID());
             outState.putString("MoviePosterKey" + key, MovieItems.get(i).getMoviePoster());
             outState.putString("MovieTitleKey" + key, MovieItems.get(i).getMovieTitle());
             outState.putString("MovieReleaseDateKey" + key, MovieItems.get(i).getMovieReleaseDate());
@@ -188,12 +195,12 @@ public class MovieListActivity extends AppCompatActivity {
                     JSONArray jArray = jObject.getJSONArray("results");
                     for (int i = 0; i < Math.min(5, jArray.length()); i++) {
                         JSONObject result = jArray.getJSONObject(i);
-                        // add description here
+                        String movieID = result.getString("id");
                         String posterPath = result.getString("poster_path").contains("/") ? "https://image.tmdb.org/t/p/original" + result.getString("poster_path") : "https://i.imgur.com/HGjprLt.jpeg";
                         String movieTitle = !result.getString("original_title").equals("") ? result.getString("original_title") : "No Title";
                         String releaseDate = !result.getString("release_date").equals("") ? "Released: " + result.getString("release_date") : "No Release Date";
                         String description = !result.getString("overview").equals("") ? result.getString("overview") : "No description";
-                        textHandler.post(() -> addMovieToRecyclerView(posterPath, movieTitle, releaseDate, description));
+                        textHandler.post(() -> addMovieToRecyclerView(movieID, posterPath, movieTitle, releaseDate, description));
                     }
 
 

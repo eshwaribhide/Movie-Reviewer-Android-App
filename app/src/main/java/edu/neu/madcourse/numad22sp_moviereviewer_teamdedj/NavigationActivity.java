@@ -11,7 +11,16 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
+// reviews child
+// review -> ID is date, review content
 
+// we go to a movie page, need to see all the reviews for it -> in a movie object, should have
+// a reviews child node with the review IDs
+// then when you want to load all the current reviews, you take all the ids, go to review, and
+// get the content
+// also have nodes with child nodes that are movie ids have a specific section for the ids, then
+// per movie you have reviews
+// can expand genres later, need to add more checkboxes
 public class NavigationActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
