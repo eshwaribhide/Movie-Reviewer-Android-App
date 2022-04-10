@@ -1,7 +1,9 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class LeaderboardActivity extends AppCompatActivity {
+    private String currentUser;
     private DatabaseReference mDatabase;
     private static final String TAG = "LeaderboardActivity";
     private RecyclerView recyclerView;
@@ -48,12 +51,30 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
     }
 
+    private void initData(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentUser")) {
+            currentUser = savedInstanceState.getString("currentUser");
+        }
+        else {
+            Log.e("INITDATA", "INITDATA");
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+            }
+        }
+    }
+
+    private void initSavedInstanceState(Bundle savedInstanceState) {
+        initData(savedInstanceState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems = new ArrayList<>();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+        initSavedInstanceState(savedInstanceState);
+        ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems = new ArrayList<>();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         recyclerView = findViewById(R.id.leaderboardRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,6 +104,23 @@ public class LeaderboardActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Bundle b = new Bundle();
+                b.putString("currentUser", currentUser);
+                Log.e("HISTORYCURRENTUSER", currentUser);
+                Intent intent = new Intent();
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

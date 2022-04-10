@@ -34,7 +34,6 @@ import java.util.ArrayList;
 // 3. Leaderboard, remove profile picture and replace with badge, add review count and perhaps position
 // 4. Display reviews design poster gets cut off
 // 5. Theaters near me
-// Pass current user to all activities
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;

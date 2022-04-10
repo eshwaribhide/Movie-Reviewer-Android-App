@@ -53,7 +53,10 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void feedPageOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, HomePage.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
@@ -66,8 +69,12 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void leaderboardOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, LeaderboardActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
