@@ -91,7 +91,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     mDatabase.child("movies").child(movieID).setValue(movieID);
                 }
                 // storing review content in a child node with review ID of date
-                mDatabase.child("reviews").child(date).setValue(editReview.getText().toString());
+                mDatabase.child("reviews").child(date).setValue(new Review(currentUser, editReview.getText().toString()));
 
                 // storing review ID for the movie review belongs to and user who made the review in
                 // order to have association
