@@ -33,4 +33,12 @@
         android:layout_marginTop="20sp"
         android:layout_marginLeft="10sp"
         android:text="This is a test movie description that should wrap once it gets too long."/>
+
+    <Button
+        android:id="@+id/writeReviewBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="reviewMovieBtnOnClick"
+        android:text="Review This Movie" />
+
 </LinearLayout>
