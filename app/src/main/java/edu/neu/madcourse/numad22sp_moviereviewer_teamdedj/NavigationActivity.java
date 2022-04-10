@@ -45,7 +45,10 @@ public class NavigationActivity extends AppCompatActivity {
 
 
     public void profilePageOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, ProfilePageActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 

@@ -31,9 +31,10 @@ import java.util.ArrayList;
 // Things that need to be done
 // 1. Expand genres
 // 2. Add followers so this can be in feed, which requires being able to see other users' profiles
-// 3. Make leaderboard dynamic
+// 3. Leaderboard, remove profile picture and replace with badge, add review count and perhaps position
 // 4. Display reviews design poster gets cut off
 // 5. Theaters near me
+// Pass current user to all activities
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
