@@ -11,21 +11,39 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+
+// can expand genres later, need to add more checkboxes
+
+// Things that need to be done
+// 1. Expand genres
+// 2. Add followers so this can be in feed
+// 3. Make leaderboard dynamic
+// 4. Display reviews design poster gets cut off
+// 5. Theaters near me
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void loginButtonOnClick(View view) {
@@ -44,9 +62,24 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialogBuilder.setView(layout);
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            Intent intent = new Intent(this, NavigationActivity.class);
-            startActivity(intent);
-        });
+
+            String username = editUsername.getText().toString();
+            mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
+                        if (t1.getResult().getValue() == null) {
+                            Toast toast = Toast.makeText(MainActivity.this, "User does not exist, please sign up", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                        else {
+                            Bundle b = new Bundle();
+                            b.putString("currentUser", username);
+                            Intent intent = new Intent(this, NavigationActivity.class);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                    });
+                });
+
+
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
         });
@@ -100,11 +133,30 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(dramaCheckBox);
 
         alertDialogBuilder.setView(layout);
+
+
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            // If username is taken need to display an error
-                Intent intent = new Intent(this, NavigationActivity.class);
-                startActivity(intent);
-        });
+            String username = editUsername.getText().toString();
+            String fullName = editFullName.getText().toString();
+
+                    mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
+                        if (t1.getResult().getValue() == null) {
+                            mDatabase.child("users").child(username).setValue(new User(fullName, new Genre(comedyCheckBox.isChecked(),actionCheckBox.isChecked(),dramaCheckBox.isChecked())));
+
+                            Bundle b = new Bundle();
+                            b.putString("currentUser", username);
+                            Intent intent = new Intent(this, NavigationActivity.class);
+                            intent.putExtras(b);
+                            startActivity(intent);
+
+                        }
+                        else {
+                            Toast toast = Toast.makeText(MainActivity.this, "User already exists", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
+                });
+
 
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
         });
