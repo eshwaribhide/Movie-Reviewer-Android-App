@@ -55,7 +55,10 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void reviewMoviesOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, MovieListActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 

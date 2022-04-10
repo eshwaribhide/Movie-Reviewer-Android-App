@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    private String currentUser;
     private String movieID;
 
     @Override
@@ -37,15 +38,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void getIncomingIntent() {
-        if(getIntent().hasExtra("movie_id") && getIntent().hasExtra("movie_title") && getIntent().hasExtra("movie_poster")
+        if(getIntent().hasExtra("currentUser") && getIntent().hasExtra("movie_id") && getIntent().hasExtra("movie_title") && getIntent().hasExtra("movie_poster")
                 && getIntent().hasExtra("movie_release_date") && getIntent().hasExtra("movie_description")) {
-            // add when a review is made
+            String currentUser = getIntent().getStringExtra("currentUser");
             String movieID = getIntent().getStringExtra("movie_id");
             String movieTitle = getIntent().getStringExtra("movie_title");
             String moviePoster = getIntent().getStringExtra("movie_poster");
             String movieReleaseDate = getIntent().getStringExtra("movie_release_date");
             String movieDescription = getIntent().getStringExtra("movie_description");
 
+            this.currentUser = currentUser;
             this.movieID = movieID;
             setMovieDetails(movieTitle, moviePoster, movieReleaseDate, movieDescription);
 
@@ -88,9 +90,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (t1.getResult().getValue() == null) {
                     mDatabase.child("movies").child(movieID).setValue(movieID);
                 }
-                mDatabase.child("movies").child(movieID).child("reviews").child(date).setValue(date);
+                // storing review content in a child node with review ID of date
                 mDatabase.child("reviews").child(date).setValue(editReview.getText().toString());
 
+                // storing review ID for the movie review belongs to and user who made the review in
+                // order to have association
+                mDatabase.child("movies").child(movieID).child("reviews").child(date).setValue(date);
+
+                // increment user review count
+                mDatabase.child("users").child(currentUser).child("reviews").child(date).setValue(date);
             });
         });
 

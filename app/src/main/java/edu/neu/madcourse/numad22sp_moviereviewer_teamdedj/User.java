@@ -8,6 +8,7 @@ public class User {
     public String fullName;
     public Genre genres;
     public String badgeStatus;
+    public Integer reviewCount;
 
 
 
@@ -19,5 +20,6 @@ public class User {
         this.fullName = fullName;
         this.genres = genres;
         this.badgeStatus = "Bronze";
+        this.reviewCount = 0;
     }
 }

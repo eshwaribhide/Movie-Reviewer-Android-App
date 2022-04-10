@@ -37,9 +37,11 @@ public class MovieListActivity extends AppCompatActivity {
     private ProgressBar spinner;
     private EditText searchInputBox;
     private boolean moviesSearched = false;
+    private String currentUser;
 
 
     public static class MovieItem {
+        private final String currentUser;
         private final String movieID;
         private final String moviePoster;
         private final String movieTitle;
@@ -47,13 +49,19 @@ public class MovieListActivity extends AppCompatActivity {
         private final String movieDescription;
 
 
-        public MovieItem(String movieID, String moviePoster, String movieTitle, String movieReleaseDate, String movieDescription) {
+        public MovieItem(String currentUser, String movieID, String moviePoster, String movieTitle, String movieReleaseDate, String movieDescription) {
+            this.currentUser = currentUser;
             this.movieID = movieID;
             this.moviePoster = moviePoster;
             this.movieTitle = movieTitle;
             this.movieReleaseDate = movieReleaseDate;
             this.movieDescription = movieDescription;
         }
+
+        public String getCurrentUser() {
+            return currentUser;
+        }
+
         public String getMovieID() {
             return movieID;
         }
@@ -86,6 +94,17 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void initData(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentUser")) {
+            currentUser = savedInstanceState.getString("currentUser");
+        }
+        else {
+            Log.e("INITDATA", "INITDATA");
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+            }
+        }
+
 
         if (savedInstanceState != null && savedInstanceState.containsKey("LengthMovieItems")) {
             moviesSearched = savedInstanceState.getBoolean("MoviesSearched");
@@ -104,7 +123,7 @@ public class MovieListActivity extends AppCompatActivity {
                     String movieReleaseDate = savedInstanceState.getString("MovieReleaseDateKey" + key);
                     String movieDescription = savedInstanceState.getString("MovieDescription" + key);
 
-                    MovieListActivity.MovieItem MovieItem = new MovieListActivity.MovieItem(movieID, moviePoster, movieTitle, movieReleaseDate, movieDescription);
+                    MovieListActivity.MovieItem MovieItem = new MovieListActivity.MovieItem(currentUser, movieID, moviePoster, movieTitle, movieReleaseDate, movieDescription);
 
                     MovieItems.add(MovieItem);
                 }
@@ -115,14 +134,14 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
-    private void addMovieToRecyclerView(String movieID, String imageURL, String movieTitle, String movieReleaseDate,
+    private void addMovieToRecyclerView(String currentUser, String movieID, String imageURL, String movieTitle, String movieReleaseDate,
                                         String movieDescription) {
         // For search box clear need to refresh RecyclerView
         if (MovieItems.size() == 0) {
             generateRecyclerView();
         }
         recyclerViewLayoutManager.smoothScrollToPosition(recyclerView, null, 0);
-        MovieItems.add(0, new MovieListActivity.MovieItem(movieID, imageURL, movieTitle, movieReleaseDate, movieDescription));
+        MovieItems.add(0, new MovieListActivity.MovieItem(currentUser, movieID, imageURL, movieTitle, movieReleaseDate, movieDescription));
         recyclerViewAdapter.notifyItemInserted(0);
     }
 
@@ -150,6 +169,7 @@ public class MovieListActivity extends AppCompatActivity {
         if (MovieItems != null) {
             size = MovieItems.size();
         }
+        outState.putString("currentUser", currentUser);
         outState.putInt("LengthMovieItems", size);
         outState.putBoolean("MoviesSearched", moviesSearched);
 
@@ -200,7 +220,7 @@ public class MovieListActivity extends AppCompatActivity {
                         String movieTitle = !result.getString("original_title").equals("") ? result.getString("original_title") : "No Title";
                         String releaseDate = !result.getString("release_date").equals("") ? "Released: " + result.getString("release_date") : "No Release Date";
                         String description = !result.getString("overview").equals("") ? result.getString("overview") : "No description";
-                        textHandler.post(() -> addMovieToRecyclerView(movieID, posterPath, movieTitle, releaseDate, description));
+                        textHandler.post(() -> addMovieToRecyclerView(currentUser, movieID, posterPath, movieTitle, releaseDate, description));
                     }
 
 

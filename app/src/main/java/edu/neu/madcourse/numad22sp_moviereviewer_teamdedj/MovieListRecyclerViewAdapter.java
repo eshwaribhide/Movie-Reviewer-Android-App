@@ -58,6 +58,7 @@ public class MovieListRecyclerViewAdapter extends RecyclerView.Adapter<MovieList
         // Send to movie details page when clicked
         holder.movieItemLayout.setOnClickListener(view -> {
             Intent intent = new Intent(context, MovieDetailsActivity.class);
+            intent.putExtra("currentUser", movieItems.get(position).getCurrentUser());
             intent.putExtra("movie_id", movieItems.get(position).getMovieID());
             intent.putExtra("movie_title", movieItems.get(position).getMovieTitle());
             intent.putExtra("movie_poster", movieItems.get(position).getMoviePoster());
