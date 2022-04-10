@@ -73,12 +73,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Log.e("firebase", "Error getting data", t.getException());
             } else {
                 for (DataSnapshot dschild : t.getResult().getChildren()) {
-                    String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
-                    String reviewContent = String.valueOf(dschild.child("reviewContent").getValue()) + "\n" + "~Reviewed By: " + dschild.child("username").getValue() + " on " + dschild.getKey();;
-                    addReviewItemToRecyclerView(reviewTitle, reviewContent);
+                    String childMovieID = String.valueOf(dschild.child("movieID").getValue());
+                    if (childMovieID.equals(movieID)) {
+                        String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
+                        String reviewContent = dschild.child("reviewContent").getValue() + "\n~ Reviewed By: " + dschild.child("username").getValue() + " on " + dschild.getKey();
+                        addReviewItemToRecyclerView(reviewTitle, reviewContent);
+
+                    }
+
                 }
 
             }});
+
         }
 
     private void addReviewItemToRecyclerView(String reviewTitle, String reviewContent) {
@@ -143,11 +149,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         editReviewTitle.setHint("Enter Review Title");
         layout.addView(editReviewTitle);
 
-        final EditText editReview = new EditText(this);
-        editReview.setHint("Write Review");
-        layout.addView(editReview);
+        final EditText editReviewContent = new EditText(this);
+        editReviewContent.setHint("Write Review");
+        layout.addView(editReviewContent);
 
-        editReview.setTextColor(Color.parseColor("#9C27B0"));
+        editReviewTitle.setTextColor(Color.parseColor("#9C27B0"));
+        editReviewContent.setTextColor(Color.parseColor("#9C27B0"));
 
         alertDialogBuilder.setView(layout);
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
@@ -158,13 +165,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     mDatabase.child("movies").child(movieID).setValue(movieID);
                 }
                 // storing review content in a child node with review ID of date
-                mDatabase.child("reviews").child(date).setValue(new Review(currentUser, editReviewTitle.getText().toString(), editReview.getText().toString()));
-
-                // storing review ID for the movie review belongs to and user who made the review in
-                // order to have association
-                mDatabase.child("movies").child(movieID).child("reviews").child(date).setValue(date);
-
-                mDatabase.child("users").child(currentUser).child("reviews").child(date).setValue(date);
+                mDatabase.child("reviews").child(date).setValue(new Review(movieID, currentUser, editReviewTitle.getText().toString(), editReviewContent.getText().toString()));
 
                 // increment user review count and then update the badge status
                 mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {

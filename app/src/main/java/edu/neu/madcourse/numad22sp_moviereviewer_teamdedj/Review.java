@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
 public class Review {
+    public String movieID;
     public String username;
     public String reviewTitle;
     public String reviewContent;
@@ -11,7 +12,8 @@ public class Review {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Review(String username, String reviewContent, String reviewTitle) {
+    public Review(String movieID, String username, String reviewTitle, String reviewContent) {
+        this.movieID = movieID;
         this.username = username;
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
