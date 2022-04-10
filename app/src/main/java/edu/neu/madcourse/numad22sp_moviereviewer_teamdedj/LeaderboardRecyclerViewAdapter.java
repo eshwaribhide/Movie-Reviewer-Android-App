@@ -52,15 +52,15 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         // dummy propic
         holder.profilePic.setImageResource(R.drawable.propic);
         switch (leaderboardItems.get(position).getBadgeLevel()) {
-            case 1:
+            case "Bronze":
                 holder.badgeImage.setImageResource(R.drawable.bronze_medal);
                 holder.badgeLevelText.setText("Bronze level member");
                 break;
-            case 2:
+            case "Silver":
                 holder.badgeImage.setImageResource(R.drawable.silver_medal);
                 holder.badgeLevelText.setText("Silver level member");
                 break;
-            case 3:
+            case "Gold":
                 holder.badgeImage.setImageResource(R.drawable.gold_medal);
                 holder.badgeLevelText.setText("Gold level member");
                 break;
