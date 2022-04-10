@@ -6,9 +6,7 @@ import android.os.Bundle;
 
 public class ProfilePageActivity extends AppCompatActivity {
 
-    // in db storing username, full name, genres, total reviews, and badge status (start with bronze, just store the drawable name),
-    // which can
-    // be retrieved with the username key. so when signing up need to control duplicate users.
+    // Need to make things on profile actually editable through db
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
