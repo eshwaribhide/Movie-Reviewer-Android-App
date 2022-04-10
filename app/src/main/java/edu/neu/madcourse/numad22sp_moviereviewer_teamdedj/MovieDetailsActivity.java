@@ -215,4 +215,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void floatingActionButtonOnClick(View view) {
+        finish();
+        startActivity(getIntent());
+    }
+
 }
