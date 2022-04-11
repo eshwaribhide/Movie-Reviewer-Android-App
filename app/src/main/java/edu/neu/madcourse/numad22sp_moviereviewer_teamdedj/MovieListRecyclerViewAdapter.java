@@ -20,7 +20,7 @@ public class MovieListRecyclerViewAdapter extends RecyclerView.Adapter<MovieList
 
     private final ArrayList<MovieListActivity.MovieItem> movieItems;
     private ListItemClickListener listener;
-    private Context context;
+    private final Context context;
 
     public MovieListRecyclerViewAdapter(Context context, ArrayList<MovieListActivity.MovieItem> movieItems) {
         this.movieItems = movieItems;

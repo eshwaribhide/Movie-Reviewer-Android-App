@@ -35,7 +35,7 @@ public class MovieListActivity extends AppCompatActivity {
     private MovieListRecyclerViewAdapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ArrayList<MovieListActivity.MovieItem> MovieItems = new ArrayList<>();
-    private Handler textHandler = new Handler();
+    private final Handler textHandler = new Handler();
     private ProgressBar spinner;
     private EditText searchInputBox;
     private boolean moviesSearched = false;
@@ -89,7 +89,7 @@ public class MovieListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         initSavedInstanceState(savedInstanceState);
 
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner = findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
         searchInputBox = findViewById(R.id.searchInputBox);
         searchInputBox.setHint("Search By Movie Name");

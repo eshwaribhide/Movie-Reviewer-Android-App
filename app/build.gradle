@@ -5,7 +5,9 @@ plugins {
 
 android {
     packagingOptions {
-        pickFirst 'META-INF/DEPENDENCIES'
+        resources {
+            pickFirsts += ['META-INF/DEPENDENCIES']
+        }
     }
     compileSdkVersion 31
     buildToolsVersion "32.0.0"

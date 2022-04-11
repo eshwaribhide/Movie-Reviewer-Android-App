@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
+package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,22 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder>{
-    private final ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems;
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+
+public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecyclerViewAdapter.TheaterViewHolder> {
+
+    private final ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems;
     private final Context context;
 
-    public LeaderboardRecyclerViewAdapter(Context context, ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems) {
-        this.leaderboardItems = leaderboardItems;
+    public TheaterRecyclerViewAdapter(Context context, ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems) {
+        this.theaterItems = theaterItems;
         this.context = context;
     }
 
-    public class LeaderboardViewHolder extends RecyclerView.ViewHolder {
+    public class TheaterViewHolder extends RecyclerView.ViewHolder {
         public ImageView badgeImage;
         public ImageView profilePic;
         public TextView userName;
         public TextView badgeLevelText;
 
-        public LeaderboardViewHolder(View itemView) {
+        public TheaterViewHolder(View itemView) {
             super(itemView);
             badgeImage = itemView.findViewById(R.id.badge_image);
             userName = itemView.findViewById(R.id.user_name);
@@ -38,26 +41,26 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
 
     @NonNull
     @Override
-    public LeaderboardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.leaderboard_card, parent, false);
-        return new LeaderboardRecyclerViewAdapter.LeaderboardViewHolder(view);
+    public TheaterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.theater_card, parent, false);
+        return new TheaterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
-        holder.userName.setText(leaderboardItems.get(position).getUserName());
+    public void onBindViewHolder(@NonNull TheaterViewHolder holder, int position) {
+        holder.userName.setText(theaterItems.get(position).getUserName());
         holder.profilePic.setImageResource(R.drawable.propic);
 
-        switch (leaderboardItems.get(position).getBadgeLevel()) {
-            case "Bronze":
+        switch (theaterItems.get(position).getBadgeLevel()) {
+            case 1:
                 holder.badgeImage.setImageResource(R.drawable.bronze_medal);
                 holder.badgeLevelText.setText("Bronze level member");
                 break;
-            case "Silver":
+            case 2:
                 holder.badgeImage.setImageResource(R.drawable.silver_medal);
                 holder.badgeLevelText.setText("Silver level member");
                 break;
-            case "Gold":
+            case 3:
                 holder.badgeImage.setImageResource(R.drawable.gold_medal);
                 holder.badgeLevelText.setText("Gold level member");
                 break;
@@ -66,6 +69,6 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
 
     @Override
     public int getItemCount() {
-        return leaderboardItems.size();
+        return theaterItems.size();
     }
 }
