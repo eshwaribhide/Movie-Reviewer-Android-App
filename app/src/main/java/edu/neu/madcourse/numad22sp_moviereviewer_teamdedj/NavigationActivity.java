@@ -77,6 +77,15 @@ public class NavigationActivity extends AppCompatActivity {
 
     }
 
+    public void searchUsersOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
+        Intent intent = new Intent(this, SearchUsersActivity.class);
+        intent.putExtras(b);
+        startActivity(intent);
+
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == 2404) {

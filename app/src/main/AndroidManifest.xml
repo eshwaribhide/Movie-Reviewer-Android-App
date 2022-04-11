@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD22Sp_MovieReviewer_TeamDEDJ">
         <activity
+            android:name=".StaticProfilePageActivity"
+            android:parentActivityName=".NavigationActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".SearchUsersActivity"
+            android:parentActivityName=".NavigationActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavigationActivity" />
+        </activity>
+        <activity
             android:name=".MovieDetailsActivity"
             android:parentActivityName=".NavigationActivity">
 
