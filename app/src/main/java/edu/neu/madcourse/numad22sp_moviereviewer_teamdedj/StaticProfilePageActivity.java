@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -84,4 +85,18 @@ public class StaticProfilePageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void followUserButtonOnClick(View view) {
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                // Current user will follow searchedUser, searchedUser will have user following
+                // follow button should disappear if user is following, replace with unfollow
+                mDatabase.child("users").child(currentUser).child("following").child(searchedUser).setValue(searchedUser);
+                mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).setValue(currentUser);
+
+
+            }
+        });}
 }

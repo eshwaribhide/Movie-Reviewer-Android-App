@@ -95,8 +95,6 @@ public class ProfilePageActivity extends AppCompatActivity {
     }
 
     public void profileSaveButtonOnClick(View view) {
-        // write to db
-        // increment user review count and then update the badge status
         mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
