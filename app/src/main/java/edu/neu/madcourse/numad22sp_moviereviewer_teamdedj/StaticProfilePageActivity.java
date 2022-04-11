@@ -7,11 +7,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Comparator;
 
 public class StaticProfilePageActivity extends AppCompatActivity {
     private String currentUser;
@@ -22,6 +28,8 @@ public class StaticProfilePageActivity extends AppCompatActivity {
     private CheckBox comedyCheckBox;
     private CheckBox actionCheckBox;
     private CheckBox dramaCheckBox;
+    private Button followUnfollowUserButton;
+    private boolean follow = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +44,34 @@ public class StaticProfilePageActivity extends AppCompatActivity {
         comedyCheckBox = findViewById(R.id.comedyCheckBoxStatic);
         actionCheckBox = findViewById(R.id.actionCheckBoxStatic);
         dramaCheckBox = findViewById(R.id.dramaCheckBoxStatic);
+        followUnfollowUserButton = findViewById(R.id.followUnfollowUserButton);
 
         mDatabase.child("users").child(searchedUser).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 username.setText(searchedUser);
+                followUnfollowUserButton.setText("Follow");
                 totalReviews.setText("Total Reviews: " + task.getResult().child("reviewCount").getValue());
                 comedyCheckBox.setChecked((Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue());
                 actionCheckBox.setChecked((Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue());
                 dramaCheckBox.setChecked((Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue());
+
+
+                mDatabase.child("users").child(currentUser).child("following").get().addOnCompleteListener(t -> {
+                    if (!t.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", t.getException());
+                    } else {
+
+                        for (DataSnapshot dschild : t.getResult().getChildren()) {
+                            String following_username = String.valueOf(dschild.getKey());
+                            // already following, so unfollow button
+                            if (following_username.equals(searchedUser)) {
+                                followUnfollowUserButton.setText("Unfollow");
+                                follow = false;
+                                break;
+                            }
+                    }}});
             }
         });
     }
@@ -86,17 +112,21 @@ public class StaticProfilePageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void followUserButtonOnClick(View view) {
+    public void followUnfollowUserButtonOnClick(View view) {
         mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                // Current user will follow searchedUser, searchedUser will have user following
-                // follow button should disappear if user is following, replace with unfollow
-                mDatabase.child("users").child(currentUser).child("following").child(searchedUser).setValue(searchedUser);
-                mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).setValue(currentUser);
-
-
+                if (follow) {
+                    mDatabase.child("users").child(currentUser).child("following").child(searchedUser).setValue(searchedUser);
+                    mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).setValue(currentUser);
+                    Snackbar.make(view, "You are now following " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                else {
+                    mDatabase.child("users").child(currentUser).child("following").child(searchedUser).removeValue();
+                    mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).removeValue();
+                    Snackbar.make(view, "You have unfollowed " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                }
             }
         });}
 }
