@@ -12,50 +12,85 @@ import java.util.Comparator;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
+/**
+ * A class for listing the Theaters near the user
+ */
 public class TheaterNearMeActivity extends AppCompatActivity {
+
+
     private static final String TAG = "TheaterNearMeActivity";
     private RecyclerView recyclerView;
     private TheaterRecyclerViewAdapter recyclerViewAdapter;
 
-
+    /**
+     * A class for the theater item
+     */
     public static class TheaterItem {
-        public final int userId;
-        public final String userName;
-        public final int userReviewCount;
-        public final int badgeLevel;
+        public final int theaterId;
+        public final String theaterName;
+        public final int theaterDistance;
+        public final String theaterAddress;
+        public final float theaterRating;
 
-        public TheaterItem(int userId, String userName, int userReviewCount, int badgeLevel) {
-            this.userName = userName;
-            this.userReviewCount = userReviewCount;
-            this.badgeLevel = badgeLevel;
-            this.userId = userId;
+        public TheaterItem(int theaterId, String theaterName, int theaterDistance, String theaterAddress, float theaterRating) {
+            this.theaterId = theaterId;
+            this.theaterName = theaterName;
+            this.theaterDistance = theaterDistance;
+            this.theaterAddress = theaterAddress;
+            this.theaterRating = theaterRating;
         }
 
-        public int getUserId() {
-            return userId;
+        /**
+         * Get the id of the theater
+         * @return the id of the theater
+         */
+        public int getTheaterId() {
+            return theaterId;
         }
 
-        public int getBadgeLevel() {
-            return badgeLevel;
+        /**
+         * Get the distance of the theater
+         * @return the distance of the theater
+         */
+        public String getTheaterDistance() {
+            return String.valueOf(theaterDistance);
         }
 
-        public int getUserReviewCount() {
-            return userReviewCount;
+        /**
+         * Get the name of the theater
+         * @return the name of the theater
+         */
+        public String getTheaterName() {
+            return theaterName;
         }
 
-        public String getUserName() {
-            return userName;
+        /**
+         * Get the address of the theater
+         * @return the address of the theater
+         */
+        public String getTheaterAddress() {
+            return theaterAddress;
         }
+
+        /**
+         * Get the rating of the theater
+         * @return the rating of the theater
+         */
+        public float getTheaterRating() {
+            return theaterRating;
+        }
+
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // static data in place for testing
+
         ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems = new ArrayList<>(Arrays.asList(
-                new TheaterItem(1, "user_123", 10, 1),
-                new TheaterItem(2, "user_456", 30, 3),
-                new TheaterItem(3, "user_789", 20, 2))
-        );
+                new TheaterItem(1, "theater_1", 10, "address_1", 4.5f),
+                new TheaterItem(2, "theater_2", 30, "address_2", 3.5f),
+                new TheaterItem(3, "theater_2", 20, "address_3", 2.5f)
+        ));
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_theater_list);
@@ -63,7 +98,7 @@ public class TheaterNearMeActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.theaterListRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        theaterItems.sort((Comparator.comparing(TheaterItem::getUserReviewCount)).reversed());
+        theaterItems.sort((Comparator.comparing(TheaterItem::getTheaterDistance)).reversed());
 
         recyclerViewAdapter = new TheaterRecyclerViewAdapter(TheaterNearMeActivity.this, theaterItems);
         recyclerView.setAdapter(recyclerViewAdapter);

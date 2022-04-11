@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
+/**
+ * RecyclerView adapter for the theater list.
+ */
 public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecyclerViewAdapter.TheaterViewHolder> {
 
     private final ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems;
@@ -24,47 +28,42 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
         this.context = context;
     }
 
+    /**
+     * Creates a new view holder.
+     */
     public class TheaterViewHolder extends RecyclerView.ViewHolder {
-        public ImageView badgeImage;
-        public ImageView profilePic;
-        public TextView userName;
-        public TextView badgeLevelText;
+        public ImageView theaterImage;
+        public TextView theaterName;
+        public TextView theaterAddress;
+        public TextView theaterDistance;
+        public RatingBar theaterRating;
 
-        public TheaterViewHolder(View itemView) {
-            super(itemView);
-            badgeImage = itemView.findViewById(R.id.badge_image);
-            userName = itemView.findViewById(R.id.user_name);
-            badgeLevelText = itemView.findViewById(R.id.badge_level_text);
-            profilePic = itemView.findViewById(R.id.profile_pic);
+        public TheaterViewHolder(View view) {
+            super(view);
+            theaterImage = view.findViewById(R.id.theater_image);
+            theaterName = view.findViewById(R.id.theater_name);
+            theaterAddress = view.findViewById(R.id.theater_address);
+            theaterDistance = view.findViewById(R.id.theater_distance);
+            theaterRating = view.findViewById(R.id.theater_rating);
         }
     }
 
     @NonNull
     @Override
-    public TheaterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TheaterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.theater_card, parent, false);
         return new TheaterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TheaterViewHolder holder, int position) {
-        holder.userName.setText(theaterItems.get(position).getUserName());
-        holder.profilePic.setImageResource(R.drawable.propic);
 
-        switch (theaterItems.get(position).getBadgeLevel()) {
-            case 1:
-                holder.badgeImage.setImageResource(R.drawable.bronze_medal);
-                holder.badgeLevelText.setText("Bronze level member");
-                break;
-            case 2:
-                holder.badgeImage.setImageResource(R.drawable.silver_medal);
-                holder.badgeLevelText.setText("Silver level member");
-                break;
-            case 3:
-                holder.badgeImage.setImageResource(R.drawable.gold_medal);
-                holder.badgeLevelText.setText("Gold level member");
-                break;
-        }
+        holder.theaterImage.setImageResource(R.drawable.propic);
+
+        holder.theaterName.setText(theaterItems.get(position).getTheaterName());
+        holder.theaterAddress.setText(theaterItems.get(position).getTheaterAddress());
+        holder.theaterDistance.setText(theaterItems.get(position).getTheaterDistance());;
+        holder.theaterRating.setRating(theaterItems.get(position).getTheaterRating());
     }
 
     @Override
