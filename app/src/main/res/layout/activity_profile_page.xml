@@ -34,9 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="28dp"
-        android:text="Total Reviews: 30"
+        android:text="Total Reviews:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/staticUsernameHeader" />
+        app:layout_constraintTop_toBottomOf="@+id/fullNameHeader" />
 
     <TextView
         android:id="@+id/staticUsersGenres"
