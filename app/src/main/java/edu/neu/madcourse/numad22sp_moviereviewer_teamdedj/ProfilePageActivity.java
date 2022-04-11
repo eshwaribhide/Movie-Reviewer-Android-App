@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 // maybe on profile page can show followers
 
 // Add username to display
+// Save state with rotating
 public class ProfilePageActivity extends AppCompatActivity {
     private String currentUser;
     private DatabaseReference mDatabase;
@@ -91,4 +93,21 @@ public class ProfilePageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void profileSaveButtonOnClick(View view) {
+        // write to db
+        // increment user review count and then update the badge status
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                // Need to also have ability to update username
+                mDatabase.child("users").child(currentUser).child("fullName").setValue(fullNameValue.getText().toString());
+                mDatabase.child("users").child(currentUser).child("genres").child("comedyGenreSelected").setValue(comedyCheckBox.isChecked());
+                mDatabase.child("users").child(currentUser).child("genres").child("actionGenreSelected").setValue(actionCheckBox.isChecked());
+                mDatabase.child("users").child(currentUser).child("genres").child("dramaGenreSelected").setValue(dramaCheckBox.isChecked());
+
+
+            }
+    });}
 }
