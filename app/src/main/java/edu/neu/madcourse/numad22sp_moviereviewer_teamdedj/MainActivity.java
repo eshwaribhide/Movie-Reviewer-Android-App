@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 // Things that need to be done
 // 1. Expand genres
-// 2. Add followers so this can be in feed
+// 2. Add followers so this can be in feed, which requires being able to see other users' profiles
 // 3. Make leaderboard dynamic
 // 4. Display reviews design poster gets cut off
 // 5. Theaters near me
