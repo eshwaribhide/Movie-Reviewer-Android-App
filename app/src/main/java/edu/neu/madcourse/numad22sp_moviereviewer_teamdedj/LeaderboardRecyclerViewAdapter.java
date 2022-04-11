@@ -5,19 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
-public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder> {
+public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder>{
     private final ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems;
-    private Context context;
+    private final Context context;
 
     public LeaderboardRecyclerViewAdapter(Context context, ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems) {
         this.leaderboardItems = leaderboardItems;
@@ -41,7 +38,7 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
 
     @NonNull
     @Override
-    public LeaderboardRecyclerViewAdapter.LeaderboardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LeaderboardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.leaderboard_card, parent, false);
         return new LeaderboardRecyclerViewAdapter.LeaderboardViewHolder(view);
     }
@@ -49,8 +46,8 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
     @Override
     public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
         holder.userName.setText(leaderboardItems.get(position).getUserName());
-        // dummy propic
         holder.profilePic.setImageResource(R.drawable.propic);
+
         switch (leaderboardItems.get(position).getBadgeLevel()) {
             case "Bronze":
                 holder.badgeImage.setImageResource(R.drawable.bronze_medal);
