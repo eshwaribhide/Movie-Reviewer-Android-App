@@ -55,15 +55,26 @@
         app:layout_constraintTop_toBottomOf="@+id/movies_btn" />
 
     <Button
-        android:id="@+id/theater_near_me_btn"
+        android:id="@+id/searchUsersBtn"
         android:layout_width="149dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:onClick="searchUsersOnClick"
+        android:text="Search Users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboard_btn" />
+
+    <Button
+        android:id="@+id/theatersBtn"
+        android:layout_width="149dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
         android:text="Theaters"
         android:onClick="theaterNearMeOnClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leaderboard_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/searchUsersBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

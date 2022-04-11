@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HomePage extends AppCompatActivity {
+    private String currentUser;
 
     // static data for testing
     private final MovieCard movie1 = new MovieCard(1, 10, "12 Angry Men", "Description");
@@ -25,6 +29,7 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        initSavedInstanceState(savedInstanceState);
         createRecyclerView();
     }
 
@@ -35,5 +40,40 @@ public class HomePage extends AppCompatActivity {
         homePageAdapter = new HomePageAdapter(movieList, this);
         recyclerView.setAdapter(homePageAdapter);
         recyclerView.setLayoutManager(linearLayout);
+    }
+
+    private void initData(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentUser")) {
+            currentUser = savedInstanceState.getString("currentUser");
+        }
+        else {
+            Log.e("INITDATA", "INITDATA");
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+            }
+        }
+    }
+
+    private void initSavedInstanceState(Bundle savedInstanceState) {
+        initData(savedInstanceState);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Bundle b = new Bundle();
+                b.putString("currentUser", currentUser);
+                Log.e("HISTORYCURRENTUSER", currentUser);
+                Intent intent = new Intent();
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

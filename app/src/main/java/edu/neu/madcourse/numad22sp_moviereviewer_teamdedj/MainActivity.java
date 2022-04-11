@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -31,9 +33,10 @@ import java.util.ArrayList;
 // Things that need to be done
 // 1. Expand genres
 // 2. Add followers so this can be in feed, which requires being able to see other users' profiles
-// 3. Make leaderboard dynamic
+// 3. Leaderboard, remove profile picture and replace with badge, add review count and perhaps position
 // 4. Display reviews design poster gets cut off
 // 5. Theaters near me
+// 6. layout for profile page, add username change, and static profile page
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -151,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         else {
-                            Toast toast = Toast.makeText(MainActivity.this, "User already exists", Toast.LENGTH_LONG);
-                            toast.show();
+                            Snackbar.make(view, "User already exists", BaseTransientBottomBar.LENGTH_LONG).show();
+
                         }
                     });
                 });
