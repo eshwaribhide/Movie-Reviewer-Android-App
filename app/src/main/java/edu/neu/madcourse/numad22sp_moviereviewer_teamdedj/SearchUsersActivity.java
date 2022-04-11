@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +22,6 @@ public class SearchUsersActivity extends AppCompatActivity {
     private String currentUser;
     private DatabaseReference mDatabase;
     private EditText searchInputBox;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +73,8 @@ public class SearchUsersActivity extends AppCompatActivity {
         } else {
             mDatabase.child("users").child(inputText).get().addOnCompleteListener(t1 -> {
                 if (t1.getResult().getValue() == null) {
-                    Toast toast = Toast.makeText(this, "User does not exist, please try again", Toast.LENGTH_LONG);
-                    toast.show();
+                    Snackbar.make(view, "User does not exist, please try again", BaseTransientBottomBar.LENGTH_LONG).show();
+
                 } else {
                     if (inputText.equals(currentUser)) {
                         Bundle b = new Bundle();
