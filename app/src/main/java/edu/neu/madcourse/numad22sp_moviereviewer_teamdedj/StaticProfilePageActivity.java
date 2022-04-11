@@ -17,8 +17,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Comparator;
-
 public class StaticProfilePageActivity extends AppCompatActivity {
     private String currentUser;
     private String searchedUser;
@@ -129,4 +127,9 @@ public class StaticProfilePageActivity extends AppCompatActivity {
                 }
             }
         });}
+
+    public void floatingActionButtonOnClick(View view) {
+        finish();
+        startActivity(getIntent());
+    }
 }
