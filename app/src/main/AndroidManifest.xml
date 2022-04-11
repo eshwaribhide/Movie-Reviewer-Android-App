@@ -72,6 +72,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NavigationActivity" />
         </activity>
+        <activity
+            android:name=".theater.TheaterNearMeActivity"
+            android:parentActivityName=".theater.TheaterNearMeActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".theater.TheaterNearMeActivity" />
+        </activity>
     </application>
 
 </manifest>

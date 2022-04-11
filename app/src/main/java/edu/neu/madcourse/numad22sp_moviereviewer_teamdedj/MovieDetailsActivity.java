@@ -37,7 +37,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MovieDetailsRecyclerViewAdapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
-    private ArrayList<MovieDetailsActivity.ReviewItem> ReviewItems = new ArrayList<>();
+    private final ArrayList<MovieDetailsActivity.ReviewItem> ReviewItems = new ArrayList<>();
 
     public static class ReviewItem {
         private final String reviewTitle;

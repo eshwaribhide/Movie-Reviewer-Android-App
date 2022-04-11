@@ -12,11 +12,11 @@ import java.util.Arrays;
 public class HomePage extends AppCompatActivity {
 
     // static data for testing
-    private MovieCard movie1 = new MovieCard(1, 10, "12 Angry Men", "Description");
-    private MovieCard movie2 = new MovieCard(2, 5, "21 Jump Street", "Description");;
-    private MovieCard movie3 = new MovieCard(3, 23, "Bohemian Rhapsody", "Description");
+    private final MovieCard movie1 = new MovieCard(1, 10, "12 Angry Men", "Description");
+    private final MovieCard movie2 = new MovieCard(2, 5, "21 Jump Street", "Description");
+    private final MovieCard movie3 = new MovieCard(3, 23, "Bohemian Rhapsody", "Description");
 
-    private ArrayList<MovieCard> movieList = new ArrayList<>(Arrays.asList(movie1, movie2, movie3));
+    private final ArrayList<MovieCard> movieList = new ArrayList<>(Arrays.asList(movie1, movie2, movie3));
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager linearLayout;
     private HomePageAdapter homePageAdapter;

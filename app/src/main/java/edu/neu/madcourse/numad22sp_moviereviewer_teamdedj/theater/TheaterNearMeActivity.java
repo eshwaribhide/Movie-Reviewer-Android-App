@@ -15,7 +15,7 @@ import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 public class TheaterNearMeActivity extends AppCompatActivity {
     private static final String TAG = "TheaterNearMeActivity";
     private RecyclerView recyclerView;
-    private TheaterNearMeRecyclerViewAdapter recyclerViewAdapter;
+    private TheaterRecyclerViewAdapter recyclerViewAdapter;
 
 
     public static class TheaterItem {
@@ -65,7 +65,7 @@ public class TheaterNearMeActivity extends AppCompatActivity {
 
         theaterItems.sort((Comparator.comparing(TheaterItem::getUserReviewCount)).reversed());
 
-        recyclerViewAdapter = new TheaterNearMeRecyclerViewAdapter(TheaterNearMeActivity.this, theaterItems);
+        recyclerViewAdapter = new TheaterRecyclerViewAdapter(TheaterNearMeActivity.this, theaterItems);
         recyclerView.setAdapter(recyclerViewAdapter);
 
     }

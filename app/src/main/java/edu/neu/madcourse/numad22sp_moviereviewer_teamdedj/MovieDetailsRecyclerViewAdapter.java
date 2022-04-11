@@ -16,7 +16,7 @@ public class MovieDetailsRecyclerViewAdapter extends RecyclerView.Adapter<MovieD
 
     private final ArrayList<MovieDetailsActivity.ReviewItem> ReviewItems;
     private ListItemClickListener listener;
-    private Context context;
+    private final Context context;
 
     public MovieDetailsRecyclerViewAdapter(Context context, ArrayList<MovieDetailsActivity.ReviewItem> ReviewItems) {
         this.ReviewItems = ReviewItems;

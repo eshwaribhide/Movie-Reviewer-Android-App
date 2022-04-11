@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
+package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+
 public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecyclerViewAdapter.TheaterViewHolder> {
 
-    private final ArrayList<LeaderboardActivity.LeaderboardItem> theaterItems;
-    private Context context;
+    private final ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems;
+    private final Context context;
 
-    public TheaterRecyclerViewAdapter(Context context, ArrayList<LeaderboardActivity.LeaderboardItem> theaterItems) {
+    public TheaterRecyclerViewAdapter(Context context, ArrayList<TheaterNearMeActivity.TheaterItem> theaterItems) {
         this.theaterItems = theaterItems;
         this.context = context;
     }
@@ -40,7 +42,7 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
     @NonNull
     @Override
     public TheaterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.leaderboard_card, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.theater_card, parent, false);
         return new TheaterViewHolder(view);
     }
 

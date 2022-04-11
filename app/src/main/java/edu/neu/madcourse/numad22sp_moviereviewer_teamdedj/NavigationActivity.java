@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater.TheaterNearMeActivity;
+
 
 public class NavigationActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -42,7 +44,17 @@ public class NavigationActivity extends AppCompatActivity {
         initData(savedInstanceState);
     }
 
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 2404) {
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+                finish();
+                startActivity(getIntent());
+            }
+        }
+    }
 
     public void profilePageOnClick(View view) {
         Intent intent = new Intent(this, ProfilePageActivity.class);
@@ -67,16 +79,12 @@ public class NavigationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 2404) {
-            Bundle b = getIntent().getExtras();
-            if (b != null) {
-                currentUser = b.getString("currentUser");
-                finish();
-                startActivity(getIntent());
-            }
-        }
+    /**
+     * An on-click function which opens the theaters list near the user
+     * @param view parent view
+     */
+    public void theaterNearMeOnClick(View view) {
+        Intent intent = new Intent(this, TheaterNearMeActivity.class);
+        startActivity(intent);
     }
-
 }

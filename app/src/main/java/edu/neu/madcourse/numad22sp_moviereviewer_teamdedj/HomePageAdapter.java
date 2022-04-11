@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MoviesViewHolder> {
 
     private final ArrayList<MovieCard> movieList;
-    private Context context;
+    private final Context context;
 
     public HomePageAdapter(ArrayList<MovieCard> movieList, Context context) {
         this.movieList = movieList;
