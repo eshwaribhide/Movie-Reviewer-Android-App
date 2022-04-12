@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         /////////////////This dialog is for signup/////////////////
 
+        /*
         // perhaps need to make a layout and inflate later
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Sign Up");
@@ -135,6 +136,22 @@ public class MainActivity extends AppCompatActivity {
         dramaCheckBox.setText("Drama");
         layout.addView(dramaCheckBox);
 
+        final CheckBox animationCheckBox = new CheckBox(this);
+        animationCheckBox.setText("Animation");
+        layout.addView(animationCheckBox);
+
+        final CheckBox horrorCheckBox = new CheckBox(this);
+        horrorCheckBox.setText("Horror");
+        layout.addView(horrorCheckBox);
+
+        final CheckBox romanceCheckBox = new CheckBox(this);
+        romanceCheckBox.setText("Romance");
+        layout.addView(romanceCheckBox);
+
+        final CheckBox sciFiCheckBox = new CheckBox(this);
+        sciFiCheckBox.setText("Science Fiction");
+        layout.addView(sciFiCheckBox);
+
         alertDialogBuilder.setView(layout);
 
 
@@ -144,7 +161,10 @@ public class MainActivity extends AppCompatActivity {
 
                     mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
                         if (t1.getResult().getValue() == null) {
-                            mDatabase.child("users").child(username).setValue(new User(fullName, new Genre(comedyCheckBox.isChecked(),actionCheckBox.isChecked(),dramaCheckBox.isChecked())));
+                            mDatabase.child("users").child(username).setValue(new User(fullName,
+                                    new Genre(comedyCheckBox.isChecked(), actionCheckBox.isChecked(),
+                                            dramaCheckBox.isChecked(), animationCheckBox.isChecked(),
+                                            horrorCheckBox.isChecked(), romanceCheckBox.isChecked(), sciFiCheckBox.isChecked())));
 
                             Bundle b = new Bundle();
                             b.putString("currentUser", username);
@@ -160,12 +180,54 @@ public class MainActivity extends AppCompatActivity {
                     });
                 });
 
+         */
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        View signupView = getLayoutInflater().inflate(R.layout.dialog_signup, null);
+        final EditText editFullName = (EditText) signupView.findViewById(R.id.signupName);
+        final EditText editUsername = (EditText) signupView.findViewById(R.id.signupUsername);
+        final CheckBox comedyCheckBox = (CheckBox) signupView.findViewById(R.id.comedy_checkbox);
+        final CheckBox actionCheckBox = (CheckBox) signupView.findViewById(R.id.action_checkbox);
+        final CheckBox dramaCheckBox = (CheckBox) signupView.findViewById(R.id.drama_checkbox);
+        final CheckBox animationCheckBox = (CheckBox) signupView.findViewById(R.id.animation_checkbox);
+        final CheckBox horrorCheckBox = (CheckBox) signupView.findViewById(R.id.horror_checkbox);
+        final CheckBox romanceCheckBox = (CheckBox) signupView.findViewById(R.id.romance_checkbox);
+        final CheckBox sciFiCheckBox = (CheckBox) signupView.findViewById(R.id.scifi_checkbox);
+        final CheckBox crimeCheckBox = (CheckBox) signupView.findViewById(R.id.crime_checkbox);
+        final CheckBox documentaryCheckBox = (CheckBox) signupView.findViewById(R.id.documentary_checkbox);
+        final CheckBox historyCheckBox = (CheckBox) signupView.findViewById(R.id.history_checkbox);
+
+        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
+            String username = editUsername.getText().toString();
+            String fullName = editFullName.getText().toString();
+
+            mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
+                if (t1.getResult().getValue() == null) {
+                    mDatabase.child("users").child(username).setValue(new User(fullName,
+                            new Genre(comedyCheckBox.isChecked(), actionCheckBox.isChecked(),
+                                    dramaCheckBox.isChecked(), animationCheckBox.isChecked(),
+                                    horrorCheckBox.isChecked(), romanceCheckBox.isChecked(),
+                                    sciFiCheckBox.isChecked(), crimeCheckBox.isChecked(),
+                                    documentaryCheckBox.isChecked(), historyCheckBox.isChecked())));
+
+                    Bundle b = new Bundle();
+                    b.putString("currentUser", username);
+                    Intent intent = new Intent(this, NavigationActivity.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
+
+                }
+                else {
+                    Snackbar.make(view, "User already exists", BaseTransientBottomBar.LENGTH_LONG).show();
+
+                }
+            });
+        });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
         });
 
+        alertDialogBuilder.setView(signupView);
         AlertDialog alertDialog = alertDialogBuilder.create();
-
         alertDialog.show();
 
     }
