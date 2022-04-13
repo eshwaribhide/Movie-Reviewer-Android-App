@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // can expand genres later, need to add more checkboxes
 
@@ -197,31 +198,52 @@ public class MainActivity extends AppCompatActivity {
         final CheckBox documentaryCheckBox = (CheckBox) signupView.findViewById(R.id.documentary_checkbox);
         final CheckBox historyCheckBox = (CheckBox) signupView.findViewById(R.id.history_checkbox);
 
+        final ArrayList<CheckBox> genreCheckboxes = new ArrayList<>(
+                Arrays.asList(comedyCheckBox, actionCheckBox, dramaCheckBox, animationCheckBox, horrorCheckBox,
+                        romanceCheckBox, sciFiCheckBox, crimeCheckBox, documentaryCheckBox, historyCheckBox)
+        );
+
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            String username = editUsername.getText().toString();
-            String fullName = editFullName.getText().toString();
+            boolean oneGenreSelected = false;
 
-            mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
-                if (t1.getResult().getValue() == null) {
-                    mDatabase.child("users").child(username).setValue(new User(fullName,
-                            new Genre(comedyCheckBox.isChecked(), actionCheckBox.isChecked(),
-                                    dramaCheckBox.isChecked(), animationCheckBox.isChecked(),
-                                    horrorCheckBox.isChecked(), romanceCheckBox.isChecked(),
-                                    sciFiCheckBox.isChecked(), crimeCheckBox.isChecked(),
-                                    documentaryCheckBox.isChecked(), historyCheckBox.isChecked())));
-
-                    Bundle b = new Bundle();
-                    b.putString("currentUser", username);
-                    Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtras(b);
-                    startActivity(intent);
-
+            for (int i = 0; i < genreCheckboxes.size(); i++) {
+                CheckBox currentGenre = genreCheckboxes.get(i);
+                if (currentGenre.isChecked()) {
+                    oneGenreSelected = true;
+                    break;
                 }
-                else {
-                    Snackbar.make(view, "User already exists", BaseTransientBottomBar.LENGTH_LONG).show();
+            }
 
-                }
-            });
+            boolean finalOneGenreSelected = oneGenreSelected;
+
+            if (!finalOneGenreSelected) {
+                Snackbar.make(view, "Please select at least one genre", BaseTransientBottomBar.LENGTH_LONG).show();
+            } else {
+                String username = editUsername.getText().toString();
+                String fullName = editFullName.getText().toString();
+
+                mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
+                    if (t1.getResult().getValue() == null) {
+                        mDatabase.child("users").child(username).setValue(new User(fullName,
+                                new Genre(comedyCheckBox.isChecked(), actionCheckBox.isChecked(),
+                                        dramaCheckBox.isChecked(), animationCheckBox.isChecked(),
+                                        horrorCheckBox.isChecked(), romanceCheckBox.isChecked(),
+                                        sciFiCheckBox.isChecked(), crimeCheckBox.isChecked(),
+                                        documentaryCheckBox.isChecked(), historyCheckBox.isChecked())));
+
+                        Bundle b = new Bundle();
+                        b.putString("currentUser", username);
+                        Intent intent = new Intent(this, NavigationActivity.class);
+                        intent.putExtras(b);
+                        startActivity(intent);
+
+                    }
+                    else {
+                        Snackbar.make(view, "User already exists", BaseTransientBottomBar.LENGTH_LONG).show();
+
+                    }
+                });
+            }
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, whichButton) -> {
         });
