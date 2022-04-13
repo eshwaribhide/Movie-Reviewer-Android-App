@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="100">
-
-
-    <ImageView
-        android:id="@+id/movie_details_image"
+    android:fillViewport="true">
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:layout_weight="50"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/movie_details_title"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="Test Movie Title"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/movie_details_release_date"
-        android:layout_marginTop="20sp"
-        android:layout_marginLeft="10sp"
-        android:text="March 12, 2020"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/movie_details_description"
-        android:layout_marginTop="20sp"
-        android:layout_marginLeft="10sp"
-        android:text="This is a test movie description that should wrap once it gets too long."/>
-
-    <Button
-        android:id="@+id/writeReviewBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="reviewMovieBtnOnClick"
-        android:text="Review This Movie" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMovieDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:weightSum="100">
 
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/movie_details_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/movie_details_title"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:text="Test Movie Title"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/movie_details_release_date"
+            android:layout_marginTop="20sp"
+            android:layout_marginLeft="10sp"
+            android:text="March 12, 2020"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/movie_details_description"
+            android:layout_marginTop="20sp"
+            android:layout_marginLeft="10sp"
+            android:text="This is a test movie description that should wrap once it gets too long."/>
+
+        <Button
+            android:id="@+id/writeReviewBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="reviewMovieBtnOnClick"
+            android:text="Review This Movie" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMovieDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+</ScrollView>

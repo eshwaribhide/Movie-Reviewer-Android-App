@@ -62,15 +62,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
         getIncomingIntent();
+    }
+
+    @Override
+    protected void onResume() {
+        Toast.makeText(this, "On resume called", Toast.LENGTH_SHORT).show();
+        super.onResume();
 
         generateRecyclerView();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("reviews").get().addOnCompleteListener(t -> {
             if (!t.isSuccessful()) {
-                Log.e("firebase", "Error getting data", t.getException());
+                Log.i("firebase", "Error getting data", t.getException());
             } else {
                 for (DataSnapshot dschild : t.getResult().getChildren()) {
                     String childMovieID = String.valueOf(dschild.child("movieID").getValue());
@@ -78,19 +82,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
                         String reviewContent = dschild.child("reviewContent").getValue() + "\n~ Reviewed By: " + dschild.child("username").getValue() + " on " + dschild.getKey();
                         addReviewItemToRecyclerView(reviewTitle, reviewContent);
-
                     }
-
                 }
-
-            }});
-
-        }
+            }
+        });
+    }
 
     private void addReviewItemToRecyclerView(String reviewTitle, String reviewContent) {
         recyclerViewLayoutManager.smoothScrollToPosition(recyclerView, null, 0);
         ReviewItems.add(0, new MovieDetailsActivity.ReviewItem(reviewTitle, reviewContent));
-        recyclerViewAdapter.notifyItemInserted(0);
+        //recyclerViewAdapter.notifyItemInserted(0);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void generateRecyclerView() {
@@ -166,6 +168,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 }
                 // storing review content in a child node with review ID of date
                 mDatabase.child("reviews").child(date).setValue(new Review(movieID, currentUser, editReviewTitle.getText().toString(), editReviewContent.getText().toString()));
+                // Refresh adapter to reflect new review
+                addReviewItemToRecyclerView(editReviewTitle.getText().toString(), editReviewContent.getText().toString());
 
                 // increment user review count and then update the badge status
                 mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
