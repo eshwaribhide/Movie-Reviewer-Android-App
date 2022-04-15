@@ -7,9 +7,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/activity_movie_details.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_navigation.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_profile_page.xml" value="0.335" />
         <entry key="app/src/main/res/layout/dialog_signup.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/movie_card.xml" value="0.375" />
-        <entry key="app/src/main/res/layout/movie_item.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/movie_card.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/movie_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/review_card_homepage.xml" value="0.25" />
         <entry key="app/src/main/res/layout/scroll_test.xml" value="0.14895833333333333" />
       </map>
     </option>

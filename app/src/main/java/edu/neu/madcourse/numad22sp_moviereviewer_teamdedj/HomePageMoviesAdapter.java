@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.MoviesViewHolder> {
+public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAdapter.MoviesViewHolder> {
 
     private final ArrayList<MovieCard> movieList;
     private final Context context;
 
-    public HomePageAdapter(ArrayList<MovieCard> movieList, Context context) {
+    public HomePageMoviesAdapter(ArrayList<MovieCard> movieList, Context context) {
         this.movieList = movieList;
         this.context = context;
     }

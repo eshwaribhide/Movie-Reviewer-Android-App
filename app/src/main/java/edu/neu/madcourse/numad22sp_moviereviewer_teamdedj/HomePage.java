@@ -9,8 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomePage extends AppCompatActivity {
     private String currentUser;
@@ -22,8 +28,17 @@ public class HomePage extends AppCompatActivity {
 
     private final ArrayList<MovieCard> movieList = new ArrayList<>(Arrays.asList(movie1, movie2, movie3));
     private RecyclerView recyclerView;
+    private RecyclerView reviewsRecyclerView;
     private RecyclerView.LayoutManager linearLayout;
-    private HomePageAdapter homePageAdapter;
+    private HomePageMoviesAdapter homePageAdapter;
+    private HomePageReviewsAdapter homePageReviewsAdapter;
+
+    private DatabaseReference mDatabase;
+    private boolean hasSelectedComedy = false;
+    private boolean hasSelectedAction = false;
+    private boolean hasSelectedDrama = false;
+    private ArrayList<String> usersFollowing = new ArrayList<>();
+    private ArrayList<ReviewCard> relevantReviews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +46,59 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
         initSavedInstanceState(savedInstanceState);
         createRecyclerView();
+
+        // Get 5 movies of user's specified genres
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // Find genres
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+           if(!task.isSuccessful()) {
+               Log.e("firebase", "Error getting data", task.getException());
+           } else {
+               // need to do a try/catch here to avoid null pointer exception
+               hasSelectedComedy = (Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue();
+               hasSelectedAction = (Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue();
+               hasSelectedDrama = (Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue();
+           }
+        });
+
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if(!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                try {
+                    // Not sure if this is the best way to access all users following but it works
+                    Map<String, String> followingObject = (Map<String, String>) task.getResult().child("following").getValue();
+                    followingObject.forEach((key, value) -> {
+                        usersFollowing.add(key);
+                    });
+                    if (usersFollowing.size() > 0) {
+                        getArrayOfReviews();
+                    }
+                } catch (NullPointerException e) {
+                    Log.e("firebase", "No following child found", task.getException());
+                }
+                System.out.println(usersFollowing);
+            }
+        });
+        createReviewsRecyclerView();
     }
 
     private void createRecyclerView() {
         linearLayout = new LinearLayoutManager(this);
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view_movies);
         recyclerView.setHasFixedSize(true);
-        homePageAdapter = new HomePageAdapter(movieList, this);
+        homePageAdapter = new HomePageMoviesAdapter(movieList, this);
         recyclerView.setAdapter(homePageAdapter);
         recyclerView.setLayoutManager(linearLayout);
+    }
+
+    private void createReviewsRecyclerView() {
+        linearLayout = new LinearLayoutManager(this);
+        reviewsRecyclerView = findViewById(R.id.recycler_view_reviews);
+        reviewsRecyclerView.setHasFixedSize(true);
+        homePageReviewsAdapter = new HomePageReviewsAdapter(relevantReviews, this);
+        reviewsRecyclerView.setAdapter(homePageReviewsAdapter);
+        reviewsRecyclerView.setLayoutManager(linearLayout);
     }
 
     private void initData(Bundle savedInstanceState) {
@@ -75,5 +134,27 @@ public class HomePage extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getArrayOfReviews() {
+        mDatabase.child("reviews").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.i("firebase", "Error getting data", task.getException());
+            } else {
+                for (DataSnapshot dschild : task.getResult().getChildren()) {
+                    String author = String.valueOf(dschild.child("username").getValue());
+                    if (usersFollowing.contains(author)) {
+                        String movieId = String.valueOf(dschild.child("movieID").getValue());
+                        ReviewCard review = new ReviewCard(author, movieId);
+                        relevantReviews.add(review);
+                    }
+                }
+                System.out.println(relevantReviews);
+            }
+            if (relevantReviews.size() > 0) {
+                createReviewsRecyclerView();
+            }
+            System.out.println("Total reviews " + relevantReviews.size());
+        });
     }
 }

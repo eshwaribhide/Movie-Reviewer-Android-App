@@ -100,89 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         /////////////////This dialog is for signup/////////////////
 
-        /*
-        // perhaps need to make a layout and inflate later
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Sign Up");
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText editFullName = new EditText(this);
-        editFullName.setHint("Enter Full Name");
-        layout.addView(editFullName);
-
-        final EditText editUsername = new EditText(this);
-        editUsername.setHint("Enter Username");
-        layout.addView(editUsername);
-
-        editFullName.setTextColor(Color.parseColor("#9C27B0"));
-        editUsername.setTextColor(Color.parseColor("#9C27B0"));
-
-        final TextView genres = new TextView(this);
-        genres.setText("Choose Genres");
-        genres.setTextSize(20);
-        genres.setTypeface(null, Typeface.BOLD_ITALIC);
-        layout.addView(genres);
-
-        final CheckBox comedyCheckBox = new CheckBox(this);
-        comedyCheckBox.setText("Comedy");
-        layout.addView(comedyCheckBox);
-
-        final CheckBox actionCheckBox = new CheckBox(this);
-        actionCheckBox.setText("Action");
-        layout.addView(actionCheckBox);
-
-        final CheckBox dramaCheckBox = new CheckBox(this);
-        dramaCheckBox.setText("Drama");
-        layout.addView(dramaCheckBox);
-
-        final CheckBox animationCheckBox = new CheckBox(this);
-        animationCheckBox.setText("Animation");
-        layout.addView(animationCheckBox);
-
-        final CheckBox horrorCheckBox = new CheckBox(this);
-        horrorCheckBox.setText("Horror");
-        layout.addView(horrorCheckBox);
-
-        final CheckBox romanceCheckBox = new CheckBox(this);
-        romanceCheckBox.setText("Romance");
-        layout.addView(romanceCheckBox);
-
-        final CheckBox sciFiCheckBox = new CheckBox(this);
-        sciFiCheckBox.setText("Science Fiction");
-        layout.addView(sciFiCheckBox);
-
-        alertDialogBuilder.setView(layout);
-
-
-        alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
-            String username = editUsername.getText().toString();
-            String fullName = editFullName.getText().toString();
-
-                    mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
-                        if (t1.getResult().getValue() == null) {
-                            mDatabase.child("users").child(username).setValue(new User(fullName,
-                                    new Genre(comedyCheckBox.isChecked(), actionCheckBox.isChecked(),
-                                            dramaCheckBox.isChecked(), animationCheckBox.isChecked(),
-                                            horrorCheckBox.isChecked(), romanceCheckBox.isChecked(), sciFiCheckBox.isChecked())));
-
-                            Bundle b = new Bundle();
-                            b.putString("currentUser", username);
-                            Intent intent = new Intent(this, NavigationActivity.class);
-                            intent.putExtras(b);
-                            startActivity(intent);
-
-                        }
-                        else {
-                            Snackbar.make(view, "User already exists", BaseTransientBottomBar.LENGTH_LONG).show();
-
-                        }
-                    });
-                });
-
-         */
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         View signupView = getLayoutInflater().inflate(R.layout.dialog_signup, null);
         final EditText editFullName = (EditText) signupView.findViewById(R.id.signupName);
@@ -251,6 +168,5 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setView(signupView);
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
     }
 }
