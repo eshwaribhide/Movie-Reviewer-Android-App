@@ -62,7 +62,7 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
 
         holder.theaterName.setText(theaterItems.get(position).getTheaterName());
         holder.theaterAddress.setText(theaterItems.get(position).getTheaterAddress());
-        holder.theaterDistance.setText(theaterItems.get(position).getTheaterDistance());;
+        holder.theaterDistance.setText(theaterItems.get(position).getTheaterId());;
         holder.theaterRating.setRating(theaterItems.get(position).getTheaterRating());
     }
 
