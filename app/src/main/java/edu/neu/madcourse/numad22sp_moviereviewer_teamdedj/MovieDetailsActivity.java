@@ -33,6 +33,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private String currentUser;
     private String movieID;
+    private String movieTitle;
 
     private RecyclerView recyclerView;
     private MovieDetailsRecyclerViewAdapter recyclerViewAdapter;
@@ -120,6 +121,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             this.currentUser = currentUser;
             this.movieID = movieID;
+            this.movieTitle = movieTitle;
             setMovieDetails(movieTitle, moviePoster, movieReleaseDate, movieDescription);
 
         }
@@ -167,7 +169,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     mDatabase.child("movies").child(movieID).setValue(movieID);
                 }
                 // storing review content in a child node with review ID of date
-                mDatabase.child("reviews").child(date).setValue(new Review(movieID, currentUser, editReviewTitle.getText().toString(), editReviewContent.getText().toString()));
+                mDatabase.child("reviews").child(date).setValue(new Review(movieID, currentUser, editReviewTitle.getText().toString(), editReviewContent.getText().toString(), movieTitle));
                 // Refresh adapter to reflect new review
                 addReviewItemToRecyclerView(editReviewTitle.getText().toString(), editReviewContent.getText().toString());
 

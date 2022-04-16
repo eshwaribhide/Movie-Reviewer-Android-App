@@ -13,10 +13,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class HomePage extends AppCompatActivity {
     private String currentUser;
@@ -96,7 +105,8 @@ public class HomePage extends AppCompatActivity {
         linearLayout = new LinearLayoutManager(this);
         reviewsRecyclerView = findViewById(R.id.recycler_view_reviews);
         reviewsRecyclerView.setHasFixedSize(true);
-        homePageReviewsAdapter = new HomePageReviewsAdapter(relevantReviews, this);
+        // show only 5 most recent reviews
+        homePageReviewsAdapter = new HomePageReviewsAdapter(new ArrayList<>(relevantReviews.subList(0, Math.min(5, relevantReviews.size()))), this);
         reviewsRecyclerView.setAdapter(homePageReviewsAdapter);
         reviewsRecyclerView.setLayoutManager(linearLayout);
     }
@@ -145,8 +155,18 @@ public class HomePage extends AppCompatActivity {
                     String author = String.valueOf(dschild.child("username").getValue());
                     if (usersFollowing.contains(author)) {
                         String movieId = String.valueOf(dschild.child("movieID").getValue());
-                        ReviewCard review = new ReviewCard(author, movieId);
-                        relevantReviews.add(review);
+                        try {
+                            String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
+                            ReviewCard review = new ReviewCard(author, movieTitle);
+                            System.out.println("MOVIE TITLE LENGTH: " + movieTitle.length());
+                            // This is for old reviews that don't include the movie title
+                            if (movieTitle.equals("null")) {
+                                review = new ReviewCard(author, movieId);
+                            }
+                            relevantReviews.add(0, review);
+                        } catch (NullPointerException e) {
+                            Log.e("Firebase", e.getLocalizedMessage());
+                        }
                     }
                 }
                 System.out.println(relevantReviews);
