@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
@@ -32,19 +33,21 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
      * Creates a new view holder.
      */
     public class TheaterViewHolder extends RecyclerView.ViewHolder {
-        public ImageView theaterImage;
         public TextView theaterName;
-        public TextView theaterAddress;
+        public TextView theaterRatingValue;
+        public RatingBar theaterRatingBar;
+        public TextView theaterUserReviewCount;
         public TextView theaterDistance;
-        public RatingBar theaterRating;
+        public TextView theaterAddress;
 
         public TheaterViewHolder(View view) {
             super(view);
-            theaterImage = view.findViewById(R.id.theater_image);
             theaterName = view.findViewById(R.id.theater_name);
-            theaterAddress = view.findViewById(R.id.theater_address);
+            theaterRatingValue = view.findViewById(R.id.rating_value);
+            theaterRatingBar = view.findViewById(R.id.theater_rating_bar);
+            theaterUserReviewCount = view.findViewById(R.id.review_count);
             theaterDistance = view.findViewById(R.id.theater_distance);
-            theaterRating = view.findViewById(R.id.theater_rating);
+            theaterAddress = view.findViewById(R.id.theater_address);
         }
     }
 
@@ -58,12 +61,19 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
     @Override
     public void onBindViewHolder(@NonNull TheaterViewHolder holder, int position) {
 
-        holder.theaterImage.setImageResource(R.drawable.propic);
 
         holder.theaterName.setText(theaterItems.get(position).getTheaterName());
+
+        holder.theaterRatingValue.setText(String.valueOf(theaterItems.get(position).getTheaterRating()));
+        holder.theaterRatingBar.setRating(theaterItems.get(position).getTheaterRating());
+
+        String reviewCount = String.format(Locale.ENGLISH, "(%d)", theaterItems.get(position).getTheaterUserReviewCount());
+        holder.theaterUserReviewCount.setText(reviewCount);
+
+        holder.theaterDistance.setText(theaterItems.get(position).getDistance());
         holder.theaterAddress.setText(theaterItems.get(position).getTheaterAddress());
-        holder.theaterDistance.setText(theaterItems.get(position).getTheaterId());;
-        holder.theaterRating.setRating(theaterItems.get(position).getTheaterRating());
+
+
     }
 
     @Override

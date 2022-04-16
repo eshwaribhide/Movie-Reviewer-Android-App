@@ -43,22 +43,26 @@ public class TheaterNearMeActivity extends AppCompatActivity {
      */
     public static class TheaterItem {
 
-        public final String theaterId;
-        public final String theaterName;
-        public final String theaterAddress;
-        public final String theaterIconImgUrl;
-        public final String theaterBusinessStatus;
-        public final float theaterRating;
+        private final String theaterId;
+        private final String theaterName;
+        private final String theaterAddress;
+        private final String theaterIconImgUrl;
+        private final Boolean theaterBusinessStatus;
+        private final float theaterRating;
+        private final int theaterUserReviewCount;
+        private final JSONObject location;
 
 
         public TheaterItem(String theaterId, String theaterName, String theaterAddress,
-                           String theaterIconImageURL, String theaterBusinessStatus, Float theaterRating) {
+                           String theaterIconImageURL, Boolean theaterBusinessStatus, Float theaterRating, int theaterUserReviewCount, JSONObject location) {
             this.theaterId = theaterId;
             this.theaterName = theaterName;
             this.theaterAddress = theaterAddress;
             this.theaterIconImgUrl = theaterIconImageURL;
             this.theaterBusinessStatus = theaterBusinessStatus;
             this.theaterRating = theaterRating;
+            this.theaterUserReviewCount = theaterUserReviewCount;
+            this.location = location;
         }
 
         /**
@@ -97,7 +101,7 @@ public class TheaterNearMeActivity extends AppCompatActivity {
          * Get the business status of the theater
          * @return the business status of the theater
          */
-        public String getTheaterBusinessStatus() {
+        public Boolean getTheaterBusinessStatus() {
             return theaterBusinessStatus;
         }
 
@@ -107,6 +111,29 @@ public class TheaterNearMeActivity extends AppCompatActivity {
          */
         public float getTheaterRating() {
             return theaterRating;
+        }
+
+        /**
+         * Get the user rating count of the theater
+         * @return the user rating count of the theater
+         */
+        public int getTheaterUserReviewCount() {
+            return theaterUserReviewCount;
+        }
+
+        /**
+         * Get the location of the theater
+         * @return the location of the theater
+         */
+        public JSONObject getLocation() {
+            return location;
+        }
+
+        /**
+         * Get the distance of the theater from the user
+         */
+        public String getDistance() {
+            return "5.5 mi";
         }
     }
 
@@ -194,21 +221,52 @@ public class TheaterNearMeActivity extends AppCompatActivity {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject theater = results.getJSONObject(i);
                 String theaterId = theater.getString("place_id");
-                String theaterName = theater.getString("name");
-                String theaterAddress = theater.getString("vicinity");
-                String theaterIconImageURL = theater.getString("icon");
-                String theaterBusinessStatus = theater.getString("business_status");
-                Float theaterRating = 0.0f;
+
+                // Get the name of the theater
+                String theaterName = "";
+                if (theater.has("name")) {
+                    theaterName = theater.getString("name");
+                }
+
+                // Get the address of the theater
+                String theaterAddress = "";
+                if (theater.has("vicinity")) {
+                    theaterAddress = theater.getString("vicinity");
+                }
+
+                // Get the icon image url
+                String theaterIconImageURL = "";
+                if (theater.has("photos")) {
+                    theaterIconImageURL = theater.getString("icon");
+                }
+
+                //Open/Close status
+                boolean theaterBusinessStatus = false;
+                if (theater.has("opening_hours") && theater.getJSONObject("opening_hours").has("open_now")){
+                    theaterBusinessStatus = Boolean.parseBoolean(theater.getJSONObject("opening_hours").getString("open_now"));
+                }
+
+                //Rating
+                float theaterRating = 0.0f;
+                int theaterRatingCount = 0;
                 if (!theater.getString("rating").equals("")){
                     theaterRating = Float.parseFloat(theater.getString("rating"));
+                    theaterRatingCount = Integer.parseInt(theater.getString("user_ratings_total"));
+                }
+
+                // Get theater location
+                JSONObject location = null;
+                if (theater.has("geometry") && theater.getJSONObject("geometry").has("location")){
+                     location = theater.getJSONObject("geometry").getJSONObject("location");
                 }
 
                 theaterItems.add(new TheaterItem(theaterId, theaterName, theaterAddress,
-                        theaterIconImageURL, theaterBusinessStatus, theaterRating));
-                System.out.println(theaterName);
+                        theaterIconImageURL, theaterBusinessStatus, theaterRating, theaterRatingCount, location));
+
             }
 
             setTheaterInRecyclerView(theaterItems);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
