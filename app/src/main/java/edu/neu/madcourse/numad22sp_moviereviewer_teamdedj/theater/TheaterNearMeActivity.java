@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,7 +27,7 @@ import java.util.Scanner;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
 /**
- * A class for listing the Theaters near the user
+ * A class for listing the Theaters near the user.
  */
 public class TheaterNearMeActivity extends AppCompatActivity {
 
@@ -34,6 +35,7 @@ public class TheaterNearMeActivity extends AppCompatActivity {
     private static final String googleAPIkey = "AIzaSyC-2LHart9nHW5WxvYiGkHMc9jILr0kTpw";
     private static final String TAG = "TheaterNearMeActivity";
     private RecyclerView recyclerView;
+    private Handler handler;
     private TheaterRecyclerViewAdapter recyclerViewAdapter;
 
     /**
@@ -108,10 +110,10 @@ public class TheaterNearMeActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        handler = new Handler();
         workerThread workerThread = new workerThread();
         new Thread(workerThread).start();
 
@@ -119,23 +121,11 @@ public class TheaterNearMeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_theater_list);
 
-
-        ArrayList<TheaterItem> theaterItems = new ArrayList<>(Arrays.asList(
-                new TheaterItem("1", "ABC1", "Park drive", "dxx", "Operational", (float) 4.5),
-                new TheaterItem("2", "ABC2", "Park drive", "dxx", "Operational", (float) 4.5),
-                new TheaterItem("3", "ABC3", "Park drive", "dxx", "Operational", (float) 4.5)
-        ));
-
-
-
-        recyclerView = findViewById(R.id.theaterListRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        recyclerViewAdapter = new TheaterRecyclerViewAdapter(TheaterNearMeActivity.this, theaterItems);
-        recyclerView.setAdapter(recyclerViewAdapter);
-
     }
 
+    /**
+     * A class for the worker thread to get the data from the Google API
+     */
     private class workerThread implements Runnable{
         @Override
         public void run() {
@@ -143,11 +133,21 @@ public class TheaterNearMeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Private method to convert the input stream to a string
+     * @param input the input stream
+     * @return the string
+     */
     private String ConvertInputString(InputStream input){
         Scanner s = new Scanner(input).useDelimiter("\\A");
         return s.hasNext() ? s.next().replace(",", ",\n") : ":";
     }
 
+    /**
+     * Find the theaters near the user using Google Places API.
+     * @param latitude the latitude of the user
+     * @param longitude the longitude of the user
+     */
     private void findNearByTheaters(double latitude, double longitude) {
 
         StringBuilder sb = new StringBuilder(googleAPIUrl);
@@ -182,6 +182,10 @@ public class TheaterNearMeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set the data in the list.
+     * @param jObj the json object that contains the data to be set from the api.
+     */
     private void setDataInPlace(JSONObject jObj) {
         try {
             JSONArray results = jObj.getJSONArray("results");
@@ -201,16 +205,36 @@ public class TheaterNearMeActivity extends AppCompatActivity {
 
                 theaterItems.add(new TheaterItem(theaterId, theaterName, theaterAddress,
                         theaterIconImageURL, theaterBusinessStatus, theaterRating));
-
                 System.out.println(theaterName);
             }
+
+            setTheaterInRecyclerView(theaterItems);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void setTheaterNotFound() {
+    /**
+     * Set the theater data in the recycler view.
+     * @param theaterItems the theater data from the API
+     */
+    private void setTheaterInRecyclerView(ArrayList<TheaterItem> theaterItems) {
+        handler.post(() -> {
+            recyclerView = findViewById(R.id.theaterListRecycler);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            recyclerViewAdapter = new TheaterRecyclerViewAdapter(TheaterNearMeActivity.this, theaterItems);
+            recyclerView.setAdapter(recyclerViewAdapter);
+        });
     }
 
+    /**
+     * Set the theater not found message.
+     */
+    private void setTheaterNotFound() {
+        handler.post(() -> {
+           // ToDo: set the theater not found message
+        });
+    }
 
 }
