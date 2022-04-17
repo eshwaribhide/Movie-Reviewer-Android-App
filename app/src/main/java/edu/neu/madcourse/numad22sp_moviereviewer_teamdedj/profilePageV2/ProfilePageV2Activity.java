@@ -197,7 +197,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             } else {
                 mDatabase.child("users").child(currentUser).child("following").child(searchedUser).removeValue();
                 mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).removeValue();
-                Snackbar.make(view, "You are now following " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                Snackbar.make(view, "You have unfollowed " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                // Update the UI
+                unfollowButton.setVisibility(View.GONE);
+                followButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -209,7 +212,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             } else {
                 mDatabase.child("users").child(currentUser).child("following").child(searchedUser).setValue(searchedUser);
                 mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).setValue(currentUser);
-                Snackbar.make(view, "You have unfollowed " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                Snackbar.make(view, "You are now following " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+                // Update the UI
+                followButton.setVisibility(View.GONE);
+                unfollowButton.setVisibility(View.VISIBLE);
             }
         });
     }
