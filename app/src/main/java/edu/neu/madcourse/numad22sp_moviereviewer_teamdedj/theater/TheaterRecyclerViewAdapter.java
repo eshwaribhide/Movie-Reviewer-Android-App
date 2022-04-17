@@ -61,7 +61,6 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
     @Override
     public void onBindViewHolder(@NonNull TheaterViewHolder holder, int position) {
 
-
         holder.theaterName.setText(theaterItems.get(position).getTheaterName());
 
         holder.theaterRatingValue.setText(String.valueOf(theaterItems.get(position).getTheaterRating()));
@@ -70,6 +69,7 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
         String reviewCount = String.format(Locale.ENGLISH, "(%d)", theaterItems.get(position).getTheaterUserReviewCount());
         holder.theaterUserReviewCount.setText(reviewCount);
 
+        System.out.println("theaterItems.get(position).getTheaterAddress() = " + theaterItems.get(position).getTheaterAddress());
         holder.theaterDistance.setText(theaterItems.get(position).getDistance());
         holder.theaterAddress.setText(theaterItems.get(position).getTheaterAddress());
 
