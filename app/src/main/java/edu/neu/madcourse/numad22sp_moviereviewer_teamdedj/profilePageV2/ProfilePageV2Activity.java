@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +36,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Button followButton;
+    private Button unfollowButton;
     private boolean isUserFollowingProfile = false;
 
     private final ArrayList<String> bundleKeys = new ArrayList<>(
@@ -117,15 +120,19 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
         mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
             followButton = findViewById(R.id.followButton);
-            followButton.setVisibility(View.VISIBLE);
+            unfollowButton = findViewById(R.id.unfollowButton);
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 for (DataSnapshot dschild: task.getResult().child("following").getChildren()) {
                     if (String.valueOf(dschild.getValue()).equals(searchedUser)) {
+                        unfollowButton.setVisibility(View.VISIBLE);
                         isUserFollowingProfile = true;
-                        followButton.setText("Unfollow");
+                        break;
                     }
+                }
+                if (!isUserFollowingProfile) {
+                    followButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -181,5 +188,29 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
     private void initSavedInstanceState(Bundle savedInstanceState) {
         initData(savedInstanceState);
+    }
+
+    public void unfollowUserOnClick(View view) {
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting user data", task.getException());
+            } else {
+                mDatabase.child("users").child(currentUser).child("following").child(searchedUser).removeValue();
+                mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).removeValue();
+                Snackbar.make(view, "You are now following " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void followUserOnClick(View view) {
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting user data", task.getException());
+            } else {
+                mDatabase.child("users").child(currentUser).child("following").child(searchedUser).setValue(searchedUser);
+                mDatabase.child("users").child(searchedUser).child("followers").child(currentUser).setValue(currentUser);
+                Snackbar.make(view, "You have unfollowed " + searchedUser, BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
     }
 }
