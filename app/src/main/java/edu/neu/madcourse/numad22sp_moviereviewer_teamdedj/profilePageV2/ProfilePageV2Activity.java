@@ -6,8 +6,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabItem;
@@ -24,13 +26,15 @@ import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.ReviewCard;
 
 public class ProfilePageV2Activity extends AppCompatActivity {
     private String currentUser;
+    private String searchedUser;
     private DatabaseReference mDatabase;
     private TextView fullNameValue;
     private TextView followersValue;
     private TextView followingValue;
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private Button followButton;
+    private boolean isUserFollowingProfile = false;
 
     private final ArrayList<String> bundleKeys = new ArrayList<>(
             Arrays.asList("comedyChecked", "actionChecked", "dramaChecked", "animationChecked",
@@ -70,7 +74,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
         ViewPagerAdapter vpAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+        mDatabase.child("users").child(searchedUser).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
@@ -84,7 +88,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
                 followersValue.setText(String.valueOf(followersCount));
 
-                // Get count of following
+                // Get count of following and determine if currentUser is following searchedUser
                 int followingCount = 0;
                 for (DataSnapshot dschild: task.getResult().child("following").getChildren()) {
                     followingCount++;
@@ -108,7 +112,21 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
                 vpAdapter.addFragment(genresFragment, "GENRES");
                 viewPager.setAdapter(vpAdapter);
-                //vpAdapter.addFragment(reviewsFragment, "REVIEWS (" + reviewsTabTitle + ")");
+            }
+        });
+
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            followButton = findViewById(R.id.followButton);
+            followButton.setVisibility(View.VISIBLE);
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                for (DataSnapshot dschild: task.getResult().child("following").getChildren()) {
+                    if (String.valueOf(dschild.getValue()).equals(searchedUser)) {
+                        isUserFollowingProfile = true;
+                        followButton.setText("Unfollow");
+                    }
+                }
             }
         });
 
@@ -119,7 +137,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 // Get all reviews written by the current user and save them in an array of ReviewCard objects
                 for (DataSnapshot dschild: task.getResult().getChildren()) {
                     String author = String.valueOf(dschild.child("username").getValue());
-                    if (author.equals(currentUser)) {
+                    if (author.equals(searchedUser)) {
                         String movieId = String.valueOf(dschild.child("movieID").getValue());
                         try {
                             String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
@@ -156,6 +174,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             Bundle b = getIntent().getExtras();
             if (b != null) {
                 currentUser = b.getString("currentUser");
+                searchedUser = b.getString("searchedUser");
             }
         }
     }

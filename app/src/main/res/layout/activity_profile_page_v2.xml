@@ -58,15 +58,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignRight="@id/profile_info_divider">
+
                     <TextView
                         android:id="@+id/followers_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
-                        android:textSize="16dp"
-                        android:textStyle="bold"
+                        android:layout_gravity="center"
                         android:textColor="@color/white"
-                        android:layout_gravity="center"/>
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -80,15 +80,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignLeft="@id/profile_info_divider">
+
                     <TextView
                         android:id="@+id/following_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
-                        android:textSize="16dp"
-                        android:textStyle="bold"
+                        android:layout_gravity="center"
                         android:textColor="@color/white"
-                        android:layout_gravity="center"/>
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -99,6 +99,15 @@
                 </LinearLayout>
             </RelativeLayout>
 
+            <Button
+                android:id="@+id/followButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Follow"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/design_default_color_primary_variant"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </RelativeLayout>

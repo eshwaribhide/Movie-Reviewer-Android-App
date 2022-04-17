@@ -57,6 +57,7 @@ public class NavigationActivity extends AppCompatActivity {
     public void profilePageOnClick(View view) {
         Bundle b = new Bundle();
         b.putString("currentUser", currentUser);
+        b.putString("searchedUser", currentUser);
         //Intent intent = new Intent(this, ProfilePageActivity.class);
         Intent intent = new Intent(this, ProfilePageV2Activity.class);
         intent.putExtras(b);
