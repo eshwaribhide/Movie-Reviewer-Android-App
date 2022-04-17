@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NUMAD22Sp_MovieReviewer_TeamDEDJ</string>
+    <string name="theater_open">Open now</string>
+    <string name="theater_closed">Closed</string>
 </resources>

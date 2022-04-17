@@ -39,6 +39,7 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
         public TextView theaterUserReviewCount;
         public TextView theaterDistance;
         public TextView theaterAddress;
+        public TextView theaterStatus;
 
         public TheaterViewHolder(View view) {
             super(view);
@@ -48,6 +49,7 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
             theaterUserReviewCount = view.findViewById(R.id.review_count);
             theaterDistance = view.findViewById(R.id.theater_distance);
             theaterAddress = view.findViewById(R.id.theater_address);
+            theaterStatus = view.findViewById(R.id.theater_status);
         }
     }
 
@@ -69,10 +71,17 @@ public class TheaterRecyclerViewAdapter extends RecyclerView.Adapter<TheaterRecy
         String reviewCount = String.format(Locale.ENGLISH, "(%d)", theaterItems.get(position).getTheaterUserReviewCount());
         holder.theaterUserReviewCount.setText(reviewCount);
 
-        System.out.println("theaterItems.get(position).getTheaterAddress() = " + theaterItems.get(position).getTheaterAddress());
+
         holder.theaterDistance.setText(theaterItems.get(position).getDistance());
         holder.theaterAddress.setText(theaterItems.get(position).getTheaterAddress());
 
+        if (theaterItems.get(position).getTheaterBusinessStatus()) {
+            holder.theaterStatus.setText(R.string.theater_open);
+            holder.theaterStatus.setTextColor(context.getResources().getColor(R.color.colorGreen));
+        } else {
+            holder.theaterStatus.setText(R.string.theater_closed);
+            holder.theaterStatus.setTextColor(context.getResources().getColor(R.color.colorRed));
+        }
 
     }
 

@@ -93,6 +93,20 @@
                     tools:layout_editor_absoluteY="41dp" />
 
                 <TextView
+                    android:id="@+id/theater_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/theater_closed"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="12sp"
+                    app:flow_verticalAlign="center"
+                    app:layout_constraintCircleRadius="1dp"
+                    app:layout_constraintStart_toEndOf="@+id/review_count"
+                    app:layout_constraintTop_toBottomOf="@+id/theater_name" />
+
+                <TextView
                     android:id="@+id/theater_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
