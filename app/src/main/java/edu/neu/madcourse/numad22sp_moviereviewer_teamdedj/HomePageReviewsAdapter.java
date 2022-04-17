@@ -33,9 +33,8 @@ public class HomePageReviewsAdapter extends RecyclerView.Adapter<HomePageReviews
     @Override
     public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
         ReviewCard currentReview = reviewList.get(position);
-        // this is a dummy image; will change this
-        holder.userPic.setImageResource(R.drawable.propic);
         holder.reviewTitle.setText(currentReview.username + " reviewed " + currentReview.movieTitle);
+        holder.reviewPreview.setText(currentReview.reviewTitle);
         // set date (need to add date to ReviewCard
     }
 
@@ -47,12 +46,12 @@ public class HomePageReviewsAdapter extends RecyclerView.Adapter<HomePageReviews
     public class ReviewsViewHolder extends RecyclerView.ViewHolder {
         public TextView reviewTitle;
         public TextView reviewDate;
-        public ImageView userPic;
+        public TextView reviewPreview;
         public ReviewsViewHolder(@NonNull View itemView) {
             super(itemView);
             reviewTitle = itemView.findViewById(R.id.usernameFeedText);
             reviewDate = itemView.findViewById(R.id.reviewDateFeedText);
-            userPic = itemView.findViewById(R.id.userPicImage);
+            reviewPreview = itemView.findViewById(R.id.reviewPreviewText);
         }
     }
 }

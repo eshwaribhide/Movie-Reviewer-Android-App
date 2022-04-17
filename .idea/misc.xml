@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_leaderboard.xml" value="0.15534420289855072" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/activity_movie_details.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_movie_list.xml" value="0.13728470111448834" />
@@ -17,6 +18,7 @@
         <entry key="app/src/main/res/layout/movie_card.xml" value="0.25" />
         <entry key="app/src/main/res/layout/movie_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/review_card_homepage.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/review_item.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/scroll_test.xml" value="0.14895833333333333" />
       </map>
     </option>

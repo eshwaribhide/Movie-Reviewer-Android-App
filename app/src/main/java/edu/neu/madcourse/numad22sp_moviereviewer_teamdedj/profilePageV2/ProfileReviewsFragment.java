@@ -3,12 +3,19 @@ package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.profilePageV2;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.HomePageReviewsAdapter;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.ReviewCard;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +23,14 @@ import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
  * create an instance of this fragment.
  */
 public class ProfileReviewsFragment extends Fragment {
+
+    // static data for testing
+    ReviewCard review1 = new ReviewCard("Test123", "Some movie", "It was good");
+    ReviewCard review2 = new ReviewCard("Test123", "Some other movie", "It was fine");
+    ArrayList<ReviewCard> testReviews = new ArrayList<>(Arrays.asList(review1, review2));
+
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager linearLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +76,13 @@ public class ProfileReviewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_reviews, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_reviews, container, false);
+        recyclerView = view.findViewById(R.id.profile_recycler_view);
+        HomePageReviewsAdapter adapter = new HomePageReviewsAdapter(testReviews, getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+        return view;
     }
+
 }
