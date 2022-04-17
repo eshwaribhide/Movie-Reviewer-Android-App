@@ -11,17 +11,9 @@ import android.widget.CheckBox;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileGenresFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+// TODO: save data on screen orientation change
+// TODO: make editable if this is current user's profile
 public class ProfileGenresFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private boolean comedyChecked = false;
     private boolean actionChecked = false;
@@ -37,24 +29,6 @@ public class ProfileGenresFragment extends Fragment {
 
     public ProfileGenresFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileGenresFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileGenresFragment newInstance(String param1, String param2) {
-        ProfileGenresFragment fragment = new ProfileGenresFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -97,7 +71,6 @@ public class ProfileGenresFragment extends Fragment {
         sciFiChecked = getArguments().getBoolean("sciFiChecked");
         documentaryChecked = getArguments().getBoolean("documentaryChecked");
         historyChecked = getArguments().getBoolean("historyChecked");
-
 
         comedyCheckbox.setChecked(comedyChecked);
         actionCheckbox.setChecked(actionChecked);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.ReviewCard;
 
 public class ProfilePageV2Activity extends AppCompatActivity {
     private String currentUser;
@@ -43,6 +44,8 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     "romanceGenreSelected", "sciFiGenreSelected", "documentaryGenreSelected",
                     "historyGenreSelected")
     );
+
+    private ArrayList<ReviewCard> userReviews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +91,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
                 followingValue.setText(String.valueOf(followingCount));
 
-                // Get count of reviews
-                String reviewsTabTitle = String.valueOf(task.getResult().child("reviewCount").getValue());
-
                 // Add the genre fragment with the user data
                 Bundle genreBundle = new Bundle();
                 for (int i = 0; i < bundleKeys.size(); i++) {
@@ -106,10 +106,42 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 ProfileGenresFragment genresFragment = new ProfileGenresFragment();
                 genresFragment.setArguments(genreBundle);
 
-                ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
-
                 vpAdapter.addFragment(genresFragment, "GENRES");
-                vpAdapter.addFragment(reviewsFragment, "REVIEWS (" + reviewsTabTitle + ")");
+                viewPager.setAdapter(vpAdapter);
+                //vpAdapter.addFragment(reviewsFragment, "REVIEWS (" + reviewsTabTitle + ")");
+            }
+        });
+
+        mDatabase.child("reviews").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting reviews data", task.getException());
+            } else {
+                // Get all reviews written by the current user and save them in an array of ReviewCard objects
+                for (DataSnapshot dschild: task.getResult().getChildren()) {
+                    String author = String.valueOf(dschild.child("username").getValue());
+                    if (author.equals(currentUser)) {
+                        String movieId = String.valueOf(dschild.child("movieID").getValue());
+                        try {
+                            String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
+                            String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
+                            ReviewCard review = new ReviewCard(author, movieTitle, reviewTitle);
+                            if (movieTitle.equals("null")) {
+                                review = new ReviewCard(author, movieId, reviewTitle);
+                            }
+                            userReviews.add(0, review);
+                        } catch (NullPointerException e) {
+                            Log.e("Firebase", e.getLocalizedMessage());
+                        }
+                    }
+                }
+                // Pass the array to the fragment
+                Bundle reviewsBundle = new Bundle();
+                reviewsBundle.putParcelableArrayList("userReviews", userReviews);
+
+                ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
+                reviewsFragment.setArguments(reviewsBundle);
+
+                vpAdapter.addFragment(reviewsFragment, "REVIEWS (" + userReviews.size() + ")");
                 viewPager.setAdapter(vpAdapter);
             }
         });
