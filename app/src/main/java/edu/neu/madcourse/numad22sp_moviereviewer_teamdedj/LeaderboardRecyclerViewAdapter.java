@@ -23,16 +23,14 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
 
     public class LeaderboardViewHolder extends RecyclerView.ViewHolder {
         public ImageView badgeImage;
-        public ImageView profilePic;
         public TextView userName;
-        public TextView badgeLevelText;
+        public TextView reviewCount;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
             badgeImage = itemView.findViewById(R.id.badge_image);
-            userName = itemView.findViewById(R.id.theater_name);
-            badgeLevelText = itemView.findViewById(R.id.theater_distance);
-            profilePic = itemView.findViewById(R.id.theater_image);
+            userName = itemView.findViewById(R.id.user_name);
+            reviewCount = itemView.findViewById(R.id.review_count);
         }
     }
 
@@ -46,20 +44,18 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
     @Override
     public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
         holder.userName.setText(leaderboardItems.get(position).getUserName());
-        holder.profilePic.setImageResource(R.drawable.propic);
+        int reviewCount = leaderboardItems.get(position).getUserReviewCount();
+        holder.reviewCount.setText("Reviews: " + reviewCount);
 
         switch (leaderboardItems.get(position).getBadgeLevel()) {
             case "Bronze":
                 holder.badgeImage.setImageResource(R.drawable.bronze_medal);
-                holder.badgeLevelText.setText("Bronze level member");
                 break;
             case "Silver":
                 holder.badgeImage.setImageResource(R.drawable.silver_medal);
-                holder.badgeLevelText.setText("Silver level member");
                 break;
             case "Gold":
                 holder.badgeImage.setImageResource(R.drawable.gold_medal);
-                holder.badgeLevelText.setText("Gold level member");
                 break;
         }
     }
