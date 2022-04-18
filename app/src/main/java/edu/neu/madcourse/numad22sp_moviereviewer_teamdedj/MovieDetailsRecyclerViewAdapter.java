@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,6 @@ public class MovieDetailsRecyclerViewAdapter extends RecyclerView.Adapter<MovieD
     public void onBindViewHolder(MovieDetailsRecyclerViewAdapter.MovieDetailsRecyclerViewHolder holder, int position) {
         holder.reviewTitle.setText(ReviewItems.get(position).getreviewTitle());
         holder.reviewContent.setText(ReviewItems.get(position).getreviewContent());
-
     }
 
     @Override

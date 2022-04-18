@@ -7,7 +7,7 @@
     tools:context=".ProfilePageActivity">
 
     <TextView
-        android:id="@+id/fullName"
+        android:id="@+id/fullNameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/fullNameValue"
         android:layout_width="177dp"
         android:layout_height="39dp"
         android:layout_marginStart="128dp"
@@ -34,12 +34,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="28dp"
-        android:text="Total Reviews: 30"
+        android:text="Total Reviews:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullName" />
+        app:layout_constraintTop_toBottomOf="@+id/fullNameHeader" />
 
     <TextView
-        android:id="@+id/genres"
+        android:id="@+id/staticUsersGenres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/totalReviews" />
 
     <CheckBox
-        android:id="@+id/comedy"
+        android:id="@+id/comedyCheckBox"
         android:layout_width="124dp"
         android:layout_height="35dp"
         android:layout_marginTop="12dp"
@@ -57,10 +57,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.217"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genres" />
+        app:layout_constraintTop_toBottomOf="@+id/staticUsersGenres" />
 
     <CheckBox
-        android:id="@+id/punCheckBoxction"
+        android:id="@+id/actionCheckBox"
         android:layout_width="126dp"
         android:layout_height="38dp"
         android:layout_marginTop="44dp"
@@ -68,10 +68,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.217"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genres" />
+        app:layout_constraintTop_toBottomOf="@+id/staticUsersGenres" />
 
     <CheckBox
-        android:id="@+id/drama"
+        android:id="@+id/dramaCheckBox"
         android:layout_width="128dp"
         android:layout_height="37dp"
         android:layout_marginTop="80dp"
@@ -79,6 +79,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.219"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genres" />
+        app:layout_constraintTop_toBottomOf="@+id/staticUsersGenres" />
+
+    <Button
+        android:id="@+id/saveProfileInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:onClick="profileSaveButtonOnClick"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/staticUsersGenres" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
