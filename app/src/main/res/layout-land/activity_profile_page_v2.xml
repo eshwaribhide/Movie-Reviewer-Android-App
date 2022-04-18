@@ -138,6 +138,7 @@
                     android:text="Edit Profile"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
+                    android:onClick="toggleEditMode"
                     android:backgroundTint="@color/design_default_color_primary_variant"
                     android:visibility="gone"/>
             </LinearLayout>

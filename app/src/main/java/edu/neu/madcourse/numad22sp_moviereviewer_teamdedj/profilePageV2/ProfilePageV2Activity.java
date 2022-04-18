@@ -42,6 +42,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private Button unfollowButton;
     private Button editProfileButton;
     private boolean isUserFollowingProfile = false;
+    private boolean inEditMode = false;
 
     private final ArrayList<String> bundleKeys = new ArrayList<>(
             Arrays.asList("comedyChecked", "actionChecked", "dramaChecked", "animationChecked",
@@ -78,6 +79,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         tabLayout = findViewById(R.id.profile_tab_layout);
         viewPager = findViewById(R.id.profile_view_pager);
         tabLayout.setupWithViewPager(viewPager);
+
+        editProfileButton = findViewById(R.id.editProfileButton);
+        followButton = findViewById(R.id.followButton);
+        unfollowButton = findViewById(R.id.unfollowButton);
 
         initSavedInstanceState(savedInstanceState);
 
@@ -130,11 +135,9 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
             // Show or hide the follow/unfollow/edit buttons
             if (currentUser.equals(searchedUser)) {
-
+                editProfileButton.setVisibility(View.VISIBLE);
             }
             mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
-                followButton = findViewById(R.id.followButton);
-                unfollowButton = findViewById(R.id.unfollowButton);
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
@@ -213,6 +216,17 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             followersValue.setText(savedInstanceState.getString("followersCount"));
             followingValue.setText(savedInstanceState.getString("followingCount"));
             fullNameValue.setText(savedInstanceState.getString("userFullName"));
+            isUserFollowingProfile = savedInstanceState.getBoolean("isUserFollowingProfile");
+
+            if (currentUser.equals(searchedUser)) {
+                editProfileButton.setVisibility(View.VISIBLE);
+            } else {
+                if (isUserFollowingProfile) {
+                    unfollowButton.setVisibility(View.VISIBLE);
+                } else {
+                    followButton.setVisibility(View.VISIBLE);
+                }
+            }
 
             if (savedInstanceState.containsKey("reviewsLength")) {
                 int size = savedInstanceState.getInt("reviewsLength");
@@ -275,6 +289,20 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         });
     }
 
+    public void toggleEditMode(View view) {
+        if (!inEditMode) {
+            inEditMode = true;
+            editProfileButton.setText("Save Changes");
+
+            // Recreate the genre fragment with clickable checkboxes
+        } else {
+            inEditMode = false;
+            editProfileButton.setText("Edit Profile");
+
+            // Restore the static genre fragment
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -289,6 +317,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         outState.putString("userFullName", (String) fullNameValue.getText());
         outState.putString("followersCount", (String) followersValue.getText());
         outState.putString("followingCount", (String) followingValue.getText());
+        outState.putBoolean("isUserFollowingProfile", isUserFollowingProfile);
 
         for (int i = 0; i < size; i++) {
             int keyInt = i + 1;
