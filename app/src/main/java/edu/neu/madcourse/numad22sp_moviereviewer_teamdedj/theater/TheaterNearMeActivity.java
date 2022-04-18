@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
     private TheaterRecyclerViewAdapter recyclerViewAdapter;
 
     private String currentUser;
+    private ProgressBar spinner;
+
 
     /**
      * A class for the theater item
@@ -207,6 +210,8 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_theater_list);
         initSavedInstanceState(savedInstanceState);
+        spinner = findViewById(R.id.theaterProgressBar);
+        spinner.setVisibility(View.GONE);
         handler = new Handler();
 
         if (checkLocationPermission()) {
@@ -344,7 +349,7 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
                 // Location of the theater
                 JSONObject location = null;
                 if (theater.has("geometry") && theater.getJSONObject("geometry").has("location")){
-                     location = theater.getJSONObject("geometry").getJSONObject("location");
+                    location = theater.getJSONObject("geometry").getJSONObject("location");
                 }
 
                 theaterItems.add(new TheaterItem(theaterId, theaterName, theaterAddress,
@@ -369,6 +374,7 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
      */
     private void setTheaterInRecyclerView(ArrayList<TheaterItem> theaterItems) {
         handler.post(() -> {
+            spinner.setVisibility(View.GONE);
             recyclerView = findViewById(R.id.theaterListRecycler);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -461,6 +467,7 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
             userLocation = location;
             TextView theaterNotFound = findViewById(R.id.no_results_text);
             theaterNotFound.setVisibility(View.GONE);
+            spinner.setVisibility(View.VISIBLE);
             // Initialize the worker thread to get theaters from google places api
             getNearestTheatersFromWorkerThread();
         } else {
