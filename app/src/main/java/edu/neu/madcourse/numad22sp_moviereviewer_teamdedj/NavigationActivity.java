@@ -57,12 +57,18 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void profilePageOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, ProfilePageActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
     public void feedPageOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, HomePage.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
@@ -75,8 +81,21 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void leaderboardOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, LeaderboardActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
+
+    }
+
+    public void searchUsersOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
+        Intent intent = new Intent(this, SearchUsersActivity.class);
+        intent.putExtras(b);
+        startActivity(intent);
+
     }
 
     /**

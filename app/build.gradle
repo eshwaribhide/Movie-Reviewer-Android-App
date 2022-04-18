@@ -4,13 +4,18 @@ plugins {
 }
 
 android {
+    compileSdkVersion 31
+
+    buildToolsVersion "32.0.0"
+
+
     packagingOptions {
         resources {
             pickFirsts += ['META-INF/DEPENDENCIES']
         }
     }
-    compileSdkVersion 31
-    buildToolsVersion "32.0.0"
+
+     
 
     defaultConfig {
         applicationId "edu.neu.madcourse.numad22sp_moviereviewer_teamdedj"
@@ -21,6 +26,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 
     buildTypes {
         release {
@@ -28,10 +38,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+
+
 }
 
 dependencies {
