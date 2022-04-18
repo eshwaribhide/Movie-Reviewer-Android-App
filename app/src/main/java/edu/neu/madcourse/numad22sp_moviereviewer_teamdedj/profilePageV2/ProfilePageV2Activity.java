@@ -131,7 +131,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                         break;
                     }
                 }
-                if (!isUserFollowingProfile) {
+                if (!isUserFollowingProfile && !currentUser.equals(searchedUser)) {
                     followButton.setVisibility(View.VISIBLE);
                 }
             }
