@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD22Sp_MovieReviewer_TeamDEDJ">
         <activity
-            android:name=".profilePageV2.ProfilePageV2Activity"
-            android:exported="false" />
-        <activity
             android:name=".StaticProfilePageActivity"
             android:parentActivityName=".NavigationActivity">
 
@@ -67,7 +64,7 @@
                 android:value=".NavigationActivity" />
         </activity>
         <activity
-            android:name=".ProfilePageActivity"
+            android:name=".profilePageV2.ProfilePageV2Activity"
             android:parentActivityName=".NavigationActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
