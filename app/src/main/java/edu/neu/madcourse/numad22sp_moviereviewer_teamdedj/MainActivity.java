@@ -29,15 +29,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// can expand genres later, need to add more checkboxes
-
 // Things that need to be done
-// 1. Expand genres
-// 2. Add followers so this can be in feed, which requires being able to see other users' profiles
-// 3. Leaderboard, remove profile picture and replace with badge, add review count and perhaps position
-// 4. Display reviews design poster gets cut off
-// 5. Theaters near me
-// 6. layout for profile page, add username change, and static profile page
+// 1. Leaderboard, remove profile picture and replace with badge, add review count and perhaps position
+// 2. layout for profile page, add username change, and static profile page
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -68,19 +62,23 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("OK", (dialog, whichButton) -> {
 
             String username = editUsername.getText().toString();
+            if (username.equals("")) {
+                Snackbar.make(view, "Please enter your username", BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+            else {
             mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
-                        if (t1.getResult().getValue() == null) {
-                            Toast toast = Toast.makeText(MainActivity.this, "User does not exist, please sign up", Toast.LENGTH_LONG);
-                            toast.show();
-                        }
-                        else {
-                            Bundle b = new Bundle();
-                            b.putString("currentUser", username);
-                            Intent intent = new Intent(this, NavigationActivity.class);
-                            intent.putExtras(b);
-                            startActivity(intent);
-                        }
-                    });
+                if (t1.getResult().getValue() == null) {
+                    Toast toast = Toast.makeText(MainActivity.this, "User does not exist, please sign up", Toast.LENGTH_LONG);
+                    toast.show();
+                } else {
+                    Bundle b = new Bundle();
+                    b.putString("currentUser", username);
+                    Intent intent = new Intent(this, NavigationActivity.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            });
+        }
                 });
 
 
@@ -132,12 +130,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             boolean finalOneGenreSelected = oneGenreSelected;
-
-            if (!finalOneGenreSelected) {
-                Snackbar.make(view, "Please select at least one genre", BaseTransientBottomBar.LENGTH_LONG).show();
-            } else {
                 String username = editUsername.getText().toString();
                 String fullName = editFullName.getText().toString();
+                if (fullName.equals("")) {
+                    Snackbar.make(view, "Please enter your full name", BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                else if (username.equals("")) {
+                    Snackbar.make(view, "Please enter a username", BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                else if (!finalOneGenreSelected) {
+                Snackbar.make(view, "Please select at least one genre", BaseTransientBottomBar.LENGTH_LONG).show();
+            } else {
 
                 mDatabase.child("users").child(username).get().addOnCompleteListener(t1 -> {
                     if (t1.getResult().getValue() == null) {
