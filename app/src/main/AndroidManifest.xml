@@ -65,15 +65,6 @@
                 android:value=".NavigationActivity" />
         </activity>
         <activity
-            android:name=".ProfilePageActivity"
-            android:parentActivityName=".NavigationActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavigationActivity" />
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -90,6 +81,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".profilePageV2.ProfilePageV2Activity"
+            android:parentActivityName="NavigationActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="NavigationActivity" />
         </activity>
         <activity
             android:name=".theater.TheaterNearMeActivity"

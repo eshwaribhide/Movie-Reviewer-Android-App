@@ -157,11 +157,12 @@ public class HomePage extends AppCompatActivity {
                         String movieId = String.valueOf(dschild.child("movieID").getValue());
                         try {
                             String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
-                            ReviewCard review = new ReviewCard(author, movieTitle);
+                            String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
+                            ReviewCard review = new ReviewCard(author, movieTitle, reviewTitle);
                             System.out.println("MOVIE TITLE LENGTH: " + movieTitle.length());
                             // This is for old reviews that don't include the movie title
                             if (movieTitle.equals("null")) {
-                                review = new ReviewCard(author, movieId);
+                                review = new ReviewCard(author, movieId, reviewTitle);
                             }
                             relevantReviews.add(0, review);
                         } catch (NullPointerException e) {

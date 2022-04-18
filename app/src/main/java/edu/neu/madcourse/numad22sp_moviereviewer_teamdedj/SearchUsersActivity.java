@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.profilePageV2.ProfilePageV2Activity;
+
 public class SearchUsersActivity extends AppCompatActivity {
     private String currentUser;
     private DatabaseReference mDatabase;
@@ -76,20 +78,12 @@ public class SearchUsersActivity extends AppCompatActivity {
                     Snackbar.make(view, "User does not exist, please try again", BaseTransientBottomBar.LENGTH_LONG).show();
 
                 } else {
-                    if (inputText.equals(currentUser)) {
-                        Bundle b = new Bundle();
-                        b.putString("currentUser", currentUser);
-                        Intent intent = new Intent(this, ProfilePageActivity.class);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                    } else {
-                        Bundle b = new Bundle();
-                        b.putString("currentUser", currentUser);
-                        b.putString("searchedUser", inputText);
-                        Intent intent = new Intent(this, StaticProfilePageActivity.class);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                    }
+                    Bundle b = new Bundle();
+                    b.putString("currentUser", currentUser);
+                    b.putString("searchedUser", inputText);
+                    Intent intent = new Intent(this, ProfilePageV2Activity.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
                 }
 
             });

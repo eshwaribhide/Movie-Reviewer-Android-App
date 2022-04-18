@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.profilePageV2.ProfilePageV2Activity;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater.TheaterNearMeActivity;
 
 
@@ -59,7 +57,9 @@ public class NavigationActivity extends AppCompatActivity {
     public void profilePageOnClick(View view) {
         Bundle b = new Bundle();
         b.putString("currentUser", currentUser);
-        Intent intent = new Intent(this, ProfilePageActivity.class);
+        b.putString("searchedUser", currentUser);
+        //Intent intent = new Intent(this, ProfilePageActivity.class);
+        Intent intent = new Intent(this, ProfilePageV2Activity.class);
         intent.putExtras(b);
         startActivity(intent);
     }
