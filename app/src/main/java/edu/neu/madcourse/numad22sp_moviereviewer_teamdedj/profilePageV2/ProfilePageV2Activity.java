@@ -28,7 +28,6 @@ import java.util.Arrays;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.ReviewCard;
 
-// TODO: make landscape layout
 public class ProfilePageV2Activity extends AppCompatActivity {
     private String currentUser;
     private String searchedUser;
@@ -41,6 +40,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private ViewPager viewPager;
     private Button followButton;
     private Button unfollowButton;
+    private Button editProfileButton;
     private boolean isUserFollowingProfile = false;
 
     private final ArrayList<String> bundleKeys = new ArrayList<>(
@@ -128,6 +128,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
             });
 
+            // Show or hide the follow/unfollow/edit buttons
+            if (currentUser.equals(searchedUser)) {
+
+            }
             mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
                 followButton = findViewById(R.id.followButton);
                 unfollowButton = findViewById(R.id.unfollowButton);
@@ -138,12 +142,14 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
                         Log.i("Firebase user data", dschild.toString());
 
+                        // If the user is also following the profile user, show the Unfollow button
                         if (String.valueOf(dschild.getValue()).equals(searchedUser)) {
                             unfollowButton.setVisibility(View.VISIBLE);
                             isUserFollowingProfile = true;
                             break;
                         }
                     }
+                    // If the user is not following the profile user, show the Follow button
                     if (!isUserFollowingProfile && !currentUser.equals(searchedUser)) {
                         followButton.setVisibility(View.VISIBLE);
                     }
@@ -176,7 +182,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     // Pass the array to the fragment
                     Bundle reviewsBundle = new Bundle();
                     reviewsBundle.putParcelableArrayList("userReviews", userReviews);
-                    Toast.makeText(this, "GETTING REVIEWS DATA", Toast.LENGTH_SHORT).show();
 
                     ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
                     reviewsFragment.setArguments(reviewsBundle);
@@ -186,6 +191,8 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
             });
         } else {
+            usernameValue.setText(searchedUser);
+
             Bundle reviewsBundle = new Bundle();
             reviewsBundle.putParcelableArrayList("userReviews", userReviews);
             ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
@@ -205,6 +212,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             searchedUser = savedInstanceState.getString("searchedUser");
             followersValue.setText(savedInstanceState.getString("followersCount"));
             followingValue.setText(savedInstanceState.getString("followingCount"));
+            fullNameValue.setText(savedInstanceState.getString("userFullName"));
 
             if (savedInstanceState.containsKey("reviewsLength")) {
                 int size = savedInstanceState.getInt("reviewsLength");
@@ -278,6 +286,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         outState.putInt("reviewsLength", size);
         outState.putString("currentUser", currentUser);
         outState.putString("searchedUser", searchedUser);
+        outState.putString("userFullName", (String) fullNameValue.getText());
         outState.putString("followersCount", (String) followersValue.getText());
         outState.putString("followingCount", (String) followingValue.getText());
 
