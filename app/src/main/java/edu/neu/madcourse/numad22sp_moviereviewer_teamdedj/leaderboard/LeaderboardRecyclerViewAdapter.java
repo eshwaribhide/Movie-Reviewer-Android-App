@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
+package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.leaderboard;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
 public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder>{
     private final ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems;
