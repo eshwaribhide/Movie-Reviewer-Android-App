@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.google.firebase.database.DatabaseReference;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.leaderboard.LeaderboardActivity;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.profilePageV2.ProfilePageV2Activity;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater.TheaterNearMeActivity;
 

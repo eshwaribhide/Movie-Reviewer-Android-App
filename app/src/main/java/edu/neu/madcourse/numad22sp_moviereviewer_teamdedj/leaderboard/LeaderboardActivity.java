@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
+package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.leaderboard;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
+
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
 public class LeaderboardActivity extends AppCompatActivity {
     private String currentUser;

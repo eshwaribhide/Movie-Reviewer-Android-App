@@ -22,51 +22,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <TextView
+                    android:id="@+id/position_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="1."
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
                 <ImageView
-                    android:id="@+id/theater_image"
+                    android:id="@+id/badge_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="5dp"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/position_number"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/theater_name"
+                    android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
                     android:text="User name"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/theater_image"
+                    app:layout_constraintStart_toEndOf="@+id/badge_image"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/badge_image"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-
-                    tools:srcCompat="@drawable/gold_medal"
+                <TextView
+                    android:id="@+id/review_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/theater_image"
-                    app:layout_constraintTop_toBottomOf="@+id/theater_name"/>
-
-                <TextView
-                    android:id="@+id/theater_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Gold Level member"
+                    android:text="Reviews: 0"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/badge_image"
-                    app:layout_constraintTop_toBottomOf="@+id/theater_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

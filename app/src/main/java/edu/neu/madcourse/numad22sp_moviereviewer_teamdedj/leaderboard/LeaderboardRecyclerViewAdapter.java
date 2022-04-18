@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
+package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.leaderboard;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+
 public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder>{
     private final ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems;
     private final Context context;
@@ -23,16 +25,16 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
 
     public class LeaderboardViewHolder extends RecyclerView.ViewHolder {
         public ImageView badgeImage;
-        public ImageView profilePic;
         public TextView userName;
-        public TextView badgeLevelText;
+        public TextView reviewCount;
+        public TextView positionNumber;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
             badgeImage = itemView.findViewById(R.id.badge_image);
-            userName = itemView.findViewById(R.id.theater_name);
-            badgeLevelText = itemView.findViewById(R.id.theater_distance);
-            profilePic = itemView.findViewById(R.id.theater_image);
+            userName = itemView.findViewById(R.id.user_name);
+            reviewCount = itemView.findViewById(R.id.review_count);
+            positionNumber = itemView.findViewById(R.id.position_number);
         }
     }
 
@@ -46,20 +48,20 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
     @Override
     public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
         holder.userName.setText(leaderboardItems.get(position).getUserName());
-        holder.profilePic.setImageResource(R.drawable.propic);
+        int reviewCount = leaderboardItems.get(position).getUserReviewCount();
+        holder.reviewCount.setText("Reviews: " + reviewCount);
+        int currentPosition = position + 1;
+        holder.positionNumber.setText(currentPosition + ".");
 
         switch (leaderboardItems.get(position).getBadgeLevel()) {
             case "Bronze":
                 holder.badgeImage.setImageResource(R.drawable.bronze_medal);
-                holder.badgeLevelText.setText("Bronze level member");
                 break;
             case "Silver":
                 holder.badgeImage.setImageResource(R.drawable.silver_medal);
-                holder.badgeLevelText.setText("Silver level member");
                 break;
             case "Gold":
                 holder.badgeImage.setImageResource(R.drawable.gold_medal);
-                holder.badgeLevelText.setText("Gold level member");
                 break;
         }
     }
