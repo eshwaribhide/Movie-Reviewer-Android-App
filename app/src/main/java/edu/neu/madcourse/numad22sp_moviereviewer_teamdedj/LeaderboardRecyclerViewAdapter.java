@@ -25,12 +25,14 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         public ImageView badgeImage;
         public TextView userName;
         public TextView reviewCount;
+        public TextView positionNumber;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
             badgeImage = itemView.findViewById(R.id.badge_image);
             userName = itemView.findViewById(R.id.user_name);
             reviewCount = itemView.findViewById(R.id.review_count);
+            positionNumber = itemView.findViewById(R.id.position_number);
         }
     }
 
@@ -46,6 +48,8 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         holder.userName.setText(leaderboardItems.get(position).getUserName());
         int reviewCount = leaderboardItems.get(position).getUserReviewCount();
         holder.reviewCount.setText("Reviews: " + reviewCount);
+        int currentPosition = position + 1;
+        holder.positionNumber.setText(currentPosition + ".");
 
         switch (leaderboardItems.get(position).getBadgeLevel()) {
             case "Bronze":
