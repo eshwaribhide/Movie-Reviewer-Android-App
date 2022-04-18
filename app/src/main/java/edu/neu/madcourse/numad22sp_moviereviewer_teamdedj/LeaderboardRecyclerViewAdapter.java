@@ -30,9 +30,9 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
             badgeImage = itemView.findViewById(R.id.badge_image);
-            userName = itemView.findViewById(R.id.user_name);
-            badgeLevelText = itemView.findViewById(R.id.badge_level_text);
-            profilePic = itemView.findViewById(R.id.profile_pic);
+            userName = itemView.findViewById(R.id.theater_name);
+            badgeLevelText = itemView.findViewById(R.id.theater_distance);
+            profilePic = itemView.findViewById(R.id.theater_image);
         }
     }
 
