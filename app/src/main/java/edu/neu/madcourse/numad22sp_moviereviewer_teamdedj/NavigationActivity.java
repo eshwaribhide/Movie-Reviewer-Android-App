@@ -84,7 +84,10 @@ public class NavigationActivity extends AppCompatActivity {
      * @param view parent view
      */
     public void theaterNearMeOnClick(View view) {
+        Bundle b = new Bundle();
+        b.putString("currentUser", currentUser);
         Intent intent = new Intent(this, TheaterNearMeActivity.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 }

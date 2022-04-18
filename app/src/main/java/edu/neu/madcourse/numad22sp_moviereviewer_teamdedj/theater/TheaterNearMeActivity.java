@@ -3,6 +3,7 @@ package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.theater;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -10,6 +11,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +55,8 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
 
     private Handler handler;
     private TheaterRecyclerViewAdapter recyclerViewAdapter;
+
+    private String currentUser;
 
     /**
      * A class for the theater item
@@ -201,6 +206,7 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_theater_list);
+        initSavedInstanceState(savedInstanceState);
         handler = new Handler();
 
         if (checkLocationPermission()) {
@@ -504,4 +510,40 @@ public class TheaterNearMeActivity extends AppCompatActivity implements Location
         LocationListener.super.onProviderDisabled(provider);
     }
 
+    ////////needed for passing back current user////////////////
+
+    private void initData(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("currentUser")) {
+            currentUser = savedInstanceState.getString("currentUser");
+        }
+        else {
+            Log.e("INITDATA", "INITDATA");
+            Bundle b = getIntent().getExtras();
+            if (b != null) {
+                currentUser = b.getString("currentUser");
+            }
+        }
+    }
+
+    private void initSavedInstanceState(Bundle savedInstanceState) {
+        initData(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Bundle b = new Bundle();
+                b.putString("currentUser", currentUser);
+                Log.e("HISTORYCURRENTUSER", currentUser);
+                Intent intent = new Intent();
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    ////////////////////////////////////////////////////////
 }
