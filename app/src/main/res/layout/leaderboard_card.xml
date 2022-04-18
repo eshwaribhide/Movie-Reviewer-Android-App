@@ -23,7 +23,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/profile_pic"
+                    android:id="@+id/theater_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -32,14 +32,14 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/theater_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
                     android:text="User name"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/profile_pic"
+                    app:layout_constraintStart_toEndOf="@+id/theater_image"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
@@ -52,11 +52,11 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profile_pic"
-                    app:layout_constraintTop_toBottomOf="@+id/user_name"/>
+                    app:layout_constraintStart_toEndOf="@+id/theater_image"
+                    app:layout_constraintTop_toBottomOf="@+id/theater_name"/>
 
                 <TextView
-                    android:id="@+id/badge_level_text"
+                    android:id="@+id/theater_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="1dp"
@@ -66,7 +66,7 @@
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/badge_image"
-                    app:layout_constraintTop_toBottomOf="@+id/user_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/theater_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
