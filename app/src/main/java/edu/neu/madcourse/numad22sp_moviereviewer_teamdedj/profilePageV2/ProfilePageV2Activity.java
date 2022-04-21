@@ -65,11 +65,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // remove the top bar
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
-
         setContentView(R.layout.activity_profile_page_v2);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
