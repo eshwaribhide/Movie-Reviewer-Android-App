@@ -30,7 +30,6 @@ import java.util.Arrays;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.ReviewCard;
 
-// TODO: make landscape layout
 public class ProfilePageV2Activity extends AppCompatActivity {
     private String currentUser;
     private String searchedUser;
@@ -43,7 +42,9 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private ViewPager viewPager;
     private Button followButton;
     private Button unfollowButton;
+    private Button editProfileButton;
     private boolean isUserFollowingProfile = false;
+    private boolean inEditMode = false;
 
     private final ArrayList<String> bundleKeys = new ArrayList<>(
             Arrays.asList("comedyChecked", "actionChecked", "dramaChecked", "animationChecked",
@@ -64,11 +65,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // remove the top bar
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
-
         setContentView(R.layout.activity_profile_page_v2);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -80,6 +76,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         tabLayout = findViewById(R.id.profile_tab_layout);
         viewPager = findViewById(R.id.profile_view_pager);
         tabLayout.setupWithViewPager(viewPager);
+
+        editProfileButton = findViewById(R.id.editProfileButton);
+        followButton = findViewById(R.id.followButton);
+        unfollowButton = findViewById(R.id.unfollowButton);
 
         initSavedInstanceState(savedInstanceState);
 
@@ -130,9 +130,11 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
             });
 
+            // Show or hide the follow/unfollow/edit buttons
+            if (currentUser.equals(searchedUser)) {
+                editProfileButton.setVisibility(View.VISIBLE);
+            }
             mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
-                followButton = findViewById(R.id.followButton);
-                unfollowButton = findViewById(R.id.unfollowButton);
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
@@ -140,12 +142,14 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
                         Log.i("Firebase user data", dschild.toString());
 
+                        // If the user is also following the profile user, show the Unfollow button
                         if (String.valueOf(dschild.getValue()).equals(searchedUser)) {
                             unfollowButton.setVisibility(View.VISIBLE);
                             isUserFollowingProfile = true;
                             break;
                         }
                     }
+                    // If the user is not following the profile user, show the Follow button
                     if (!isUserFollowingProfile && !currentUser.equals(searchedUser)) {
                         followButton.setVisibility(View.VISIBLE);
                     }
@@ -178,7 +182,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     // Pass the array to the fragment
                     Bundle reviewsBundle = new Bundle();
                     reviewsBundle.putParcelableArrayList("userReviews", userReviews);
-                    Toast.makeText(this, "GETTING REVIEWS DATA", Toast.LENGTH_SHORT).show();
 
                     ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
                     reviewsFragment.setArguments(reviewsBundle);
@@ -188,6 +191,8 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
             });
         } else {
+            usernameValue.setText(searchedUser);
+
             Bundle reviewsBundle = new Bundle();
             reviewsBundle.putParcelableArrayList("userReviews", userReviews);
             ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
@@ -207,6 +212,18 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             searchedUser = savedInstanceState.getString("searchedUser");
             followersValue.setText(savedInstanceState.getString("followersCount"));
             followingValue.setText(savedInstanceState.getString("followingCount"));
+            fullNameValue.setText(savedInstanceState.getString("userFullName"));
+            isUserFollowingProfile = savedInstanceState.getBoolean("isUserFollowingProfile");
+
+            if (currentUser.equals(searchedUser)) {
+                editProfileButton.setVisibility(View.VISIBLE);
+            } else {
+                if (isUserFollowingProfile) {
+                    unfollowButton.setVisibility(View.VISIBLE);
+                } else {
+                    followButton.setVisibility(View.VISIBLE);
+                }
+            }
 
             if (savedInstanceState.containsKey("reviewsLength")) {
                 int size = savedInstanceState.getInt("reviewsLength");
@@ -269,6 +286,20 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         });
     }
 
+    public void toggleEditMode(View view) {
+        if (!inEditMode) {
+            inEditMode = true;
+            editProfileButton.setText("Save Changes");
+
+            // Recreate the genre fragment with clickable checkboxes
+        } else {
+            inEditMode = false;
+            editProfileButton.setText("Edit Profile");
+
+            // Restore the static genre fragment
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -280,8 +311,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         outState.putInt("reviewsLength", size);
         outState.putString("currentUser", currentUser);
         outState.putString("searchedUser", searchedUser);
+        outState.putString("userFullName", (String) fullNameValue.getText());
         outState.putString("followersCount", (String) followersValue.getText());
         outState.putString("followingCount", (String) followingValue.getText());
+        outState.putBoolean("isUserFollowingProfile", isUserFollowingProfile);
 
         for (int i = 0; i < size; i++) {
             int keyInt = i + 1;
