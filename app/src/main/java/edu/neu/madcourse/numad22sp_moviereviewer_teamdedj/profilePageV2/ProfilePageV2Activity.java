@@ -169,14 +169,15 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     // Get all reviews written by the current user and save them in an array of ReviewCard objects
                     for (DataSnapshot dschild: task.getResult().getChildren()) {
                         String author = String.valueOf(dschild.child("username").getValue());
+                        String reviewId = String.valueOf(dschild.getKey());
                         if (author.equals(searchedUser)) {
                             String movieId = String.valueOf(dschild.child("movieID").getValue());
                             try {
                                 String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
                                 String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
-                                ReviewCard review = new ReviewCard(author, movieTitle, reviewTitle);
+                                ReviewCard review = new ReviewCard(reviewId, author, movieTitle, reviewTitle);
                                 if (movieTitle.equals("null")) {
-                                    review = new ReviewCard(author, movieId, reviewTitle);
+                                    review = new ReviewCard(reviewId, author, movieId, reviewTitle);
                                 }
                                 userReviews.add(0, review);
                             } catch (NullPointerException e) {
@@ -187,6 +188,8 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     // Pass the array to the fragment
                     Bundle reviewsBundle = new Bundle();
                     reviewsBundle.putParcelableArrayList("userReviews", userReviews);
+                    reviewsBundle.putString("currentUser", currentUser);
+                    reviewsBundle.putString("searchedUser", searchedUser);
 
                     ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
                     reviewsFragment.setArguments(reviewsBundle);
@@ -200,6 +203,9 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
             Bundle reviewsBundle = new Bundle();
             reviewsBundle.putParcelableArrayList("userReviews", userReviews);
+            reviewsBundle.putString("currentUser", currentUser);
+            reviewsBundle.putString("searchedUser", searchedUser);
+            // TODO: put reviewID
             ProfileReviewsFragment reviewsFragment = new ProfileReviewsFragment();
             reviewsFragment.setArguments(reviewsBundle);
 
@@ -220,9 +226,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             fullNameValue.setText(savedInstanceState.getString("userFullName"));
             isUserFollowingProfile = savedInstanceState.getBoolean("isUserFollowingProfile");
 
-            if (currentUser.equals(searchedUser)) {
-                editProfileButton.setVisibility(View.VISIBLE);
-            } else {
+            if (!currentUser.equals(searchedUser)) {
                 if (isUserFollowingProfile) {
                     unfollowButton.setVisibility(View.VISIBLE);
                 } else {
@@ -237,11 +241,12 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                     for (int i = 0; i < size; i ++) {
                         int keyInt = i+1;
                         String key = Integer.toString(keyInt);
+                        String reviewId = savedInstanceState.getString("ReviewId"+key);
                         String reviewUsername = savedInstanceState.getString("Author"+key);
                         String reviewTitle = savedInstanceState.getString("ReviewTitle"+key);
                         String movieTitle = savedInstanceState.getString("MovieTitle"+key);
 
-                        ReviewCard userReview = new ReviewCard(reviewUsername, movieTitle, reviewTitle);
+                        ReviewCard userReview = new ReviewCard(reviewId, reviewUsername, movieTitle, reviewTitle);
                         userReviews.add(userReview);
                     }
                 }
@@ -324,6 +329,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         for (int i = 0; i < size; i++) {
             int keyInt = i + 1;
             String key = Integer.toString(keyInt);
+            outState.putString("ReviewId" + key, userReviews.get(i).reviewId);
             outState.putString("MovieTitle" + key, userReviews.get(i).movieTitle);
             outState.putString("ReviewTitle" + key, userReviews.get(i).reviewTitle);
             outState.putString("Author" + key, userReviews.get(i).username);

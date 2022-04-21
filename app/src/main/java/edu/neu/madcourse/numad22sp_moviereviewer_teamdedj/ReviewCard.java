@@ -8,11 +8,13 @@ This review card is used to load reviews in a recycler view in ProfileReviewsFra
 Since this is generated in an activity and passed to a fragment, it needs to implement Parcelable.
  */
 public class ReviewCard implements Parcelable {
+    public String reviewId;
     public String username;
     public String movieTitle;
     public String reviewTitle;
 
-    public ReviewCard(String username, String movieTitle, String reviewTitle) {
+    public ReviewCard(String reviewId, String username, String movieTitle, String reviewTitle) {
+        this.reviewId = reviewId;
         this.username = username;
         this.movieTitle = movieTitle;
         this.reviewTitle = reviewTitle;

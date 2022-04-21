@@ -153,16 +153,17 @@ public class HomePage extends AppCompatActivity {
             } else {
                 for (DataSnapshot dschild : task.getResult().getChildren()) {
                     String author = String.valueOf(dschild.child("username").getValue());
+                    String reviewId = String.valueOf(dschild.getKey());
                     if (usersFollowing.contains(author)) {
                         String movieId = String.valueOf(dschild.child("movieID").getValue());
                         try {
                             String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
                             String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
-                            ReviewCard review = new ReviewCard(author, movieTitle, reviewTitle);
+                            ReviewCard review = new ReviewCard(reviewId, author, movieTitle, reviewTitle);
                             System.out.println("MOVIE TITLE LENGTH: " + movieTitle.length());
                             // This is for old reviews that don't include the movie title
                             if (movieTitle.equals("null")) {
-                                review = new ReviewCard(author, movieId, reviewTitle);
+                                review = new ReviewCard(reviewId, author, movieId, reviewTitle);
                             }
                             relevantReviews.add(0, review);
                         } catch (NullPointerException e) {
