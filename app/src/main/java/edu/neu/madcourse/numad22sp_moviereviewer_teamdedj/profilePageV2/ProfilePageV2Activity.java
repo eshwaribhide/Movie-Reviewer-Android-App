@@ -112,6 +112,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
 
                     // Add the genre fragment with the user data
                     Bundle genreBundle = new Bundle();
+                    genreBundle.putString("currentUser", currentUser);
                     for (int i = 0; i < bundleKeys.size(); i++) {
                         String bundleKey = bundleKeys.get(i);
                         String firebaseKey = firebaseKeys.get(i);
@@ -121,19 +122,23 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                             genreBundle.putBoolean(bundleKey, false);
                         }
                     }
-
-                    ProfileGenresFragment genresFragment = new ProfileGenresFragment();
-                    genresFragment.setArguments(genreBundle);
-
-                    vpAdapter.addFragment(genresFragment, "GENRES");
+                    if (currentUser.equals(searchedUser)) {
+                        EditableProfileGenresFragment genresFragment = new EditableProfileGenresFragment();
+                        genresFragment.setArguments(genreBundle);
+                        vpAdapter.addFragment(genresFragment, "GENRES");
+                    } else {
+                        ProfileGenresFragment genresFragment = new ProfileGenresFragment();
+                        genresFragment.setArguments(genreBundle);
+                        vpAdapter.addFragment(genresFragment, "GENRES");
+                    }
                     viewPager.setAdapter(vpAdapter);
                 }
             });
 
             // Show or hide the follow/unfollow/edit buttons
-            if (currentUser.equals(searchedUser)) {
-                editProfileButton.setVisibility(View.VISIBLE);
-            }
+//            if (currentUser.equals(searchedUser)) {
+//                editProfileButton.setVisibility(View.VISIBLE);
+//            }
             mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());

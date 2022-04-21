@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
 
-// TODO: save data on screen orientation change
-// TODO: make editable if this is current user's profile
 public class ProfileGenresFragment extends Fragment {
 
     private boolean comedyChecked = false;
@@ -25,7 +28,6 @@ public class ProfileGenresFragment extends Fragment {
     private boolean sciFiChecked  = false;
     private boolean documentaryChecked  = false;
     private boolean historyChecked  = false;
-
 
     public ProfileGenresFragment() {
         // Required empty public constructor
