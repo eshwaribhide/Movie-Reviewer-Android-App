@@ -89,6 +89,26 @@ public class ProfileReviewsFragment extends Fragment {
             });
             adapter.notifyDataSetChanged();
             Toast.makeText(getActivity(), "Removed " + currentReview.reviewId, Toast.LENGTH_SHORT).show();
+
+            // decrement review count
+            mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    int reviewCount = Integer.parseInt(String.valueOf(task.getResult().child("reviewCount").getValue()));
+                    int newReviewCount = reviewCount - 1;
+                    // Change user's status
+                    if (newReviewCount <20) {
+                        if (newReviewCount >=10) {
+                            mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Silver");
+                        }
+                        else {
+                            mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Bronze");
+                        }
+                    }
+                    mDatabase.child("users").child(currentUser).child("reviewCount").setValue(newReviewCount);
+                }
+            });
         }
     };
 }
