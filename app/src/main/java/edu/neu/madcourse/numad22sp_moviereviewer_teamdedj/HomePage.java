@@ -152,6 +152,7 @@ public class HomePage extends AppCompatActivity {
                         String movieId = savedInstanceState.getString("MovieId"+key);
                         String poster = savedInstanceState.getString("MoviePoster"+key);
                         String title = savedInstanceState.getString("MovieTitle"+key);
+                        Log.e("LOADED_TITLE", title);
                         String releaseDate = savedInstanceState.getString("ReleaseDate"+key);
                         String description = savedInstanceState.getString("Description"+key);
 
@@ -169,7 +170,7 @@ public class HomePage extends AppCompatActivity {
                         int keyInt = i+1;
                         String key = Integer.toString(keyInt);
                         String reviewId = savedInstanceState.getString("ReviewId"+key);
-                        String movieTitle = savedInstanceState.getString("MovieTitle"+key);
+                        String movieTitle = savedInstanceState.getString("ReviewMovieTitle"+key);
                         String reviewTitle = savedInstanceState.getString("ReviewTitle"+key);
                         String reviewDate = savedInstanceState.getString("ReviewDate"+key);
                         String author = savedInstanceState.getString("Author"+key);
@@ -347,6 +348,7 @@ public class HomePage extends AppCompatActivity {
         for (int i = 0; i < moviesCount; i++) {
             int keyInt = i + 1;
             String key = Integer.toString(keyInt);
+            Log.e("SAVED_TITLE", movieList.get(i).title);
             outState.putString("MovieId" + key, movieList.get(i).movieId);
             outState.putString("MoviePoster" + key, movieList.get(i).poster);
             outState.putString("MovieTitle" + key, movieList.get(i).title);
@@ -365,7 +367,7 @@ public class HomePage extends AppCompatActivity {
             int keyInt = i + 1;
             String key = Integer.toString(keyInt);
             ReviewCard review = relevantReviews.get(i);
-            outState.putString("MovieTitle" + key, review.movieTitle);
+            outState.putString("ReviewMovieTitle" + key, review.movieTitle);
             outState.putString("ReviewTitle" + key, review.reviewTitle);
             outState.putString("ReviewDate" + key, review.reviewDate);
             outState.putString("ReviewId" + key, review.reviewId);
