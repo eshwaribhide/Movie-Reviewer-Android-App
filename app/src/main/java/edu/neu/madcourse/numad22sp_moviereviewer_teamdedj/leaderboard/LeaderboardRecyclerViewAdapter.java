@@ -1,18 +1,22 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.leaderboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.R;
+import edu.neu.madcourse.numad22sp_moviereviewer_teamdedj.profilePageV2.ProfilePageV2Activity;
 
 public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<LeaderboardRecyclerViewAdapter.LeaderboardViewHolder>{
     private final ArrayList<LeaderboardActivity.LeaderboardItem> leaderboardItems;
@@ -28,6 +32,7 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         public TextView userName;
         public TextView reviewCount;
         public TextView positionNumber;
+        public CardView leaderboardItemLayout;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
@@ -35,6 +40,7 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
             userName = itemView.findViewById(R.id.user_name);
             reviewCount = itemView.findViewById(R.id.review_count);
             positionNumber = itemView.findViewById(R.id.position_number);
+            leaderboardItemLayout = itemView.findViewById(R.id.leaderboard_item_container);
         }
     }
 
@@ -64,6 +70,14 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
                 holder.badgeImage.setImageResource(R.drawable.gold_medal);
                 break;
         }
+
+        holder.leaderboardItemLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ProfilePageV2Activity.class);
+            intent.putExtra("currentUser", leaderboardItems.get(position).currentUser);
+            intent.putExtra("searchedUser", leaderboardItems.get(position).userName);
+            context.startActivity(intent);
+        });
+
     }
 
     @Override

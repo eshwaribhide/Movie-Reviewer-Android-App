@@ -28,11 +28,13 @@ public class LeaderboardActivity extends AppCompatActivity {
     // private ArrayList<LeaderboardActivity.LeaderboardItem> userItems = new ArrayList<>();
 
     public static class LeaderboardItem {
+        public String currentUser;
         public final String userName;
         public final int userReviewCount;
         public final String badgeLevel;
 
-        public LeaderboardItem(String userName, int userReviewCount, String badgeLevel) {
+        public LeaderboardItem(String currentUser, String userName, int userReviewCount, String badgeLevel) {
+            this.currentUser = currentUser;
             this.userName = userName;
             this.userReviewCount = userReviewCount;
             this.badgeLevel = badgeLevel;
@@ -89,7 +91,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
                     int reviewCount = Integer.parseInt(String.valueOf(dschild.child("reviewCount").getValue()));
                     String badgeStatus = String.valueOf(dschild.child("badgeStatus").getValue());
-                    leaderboardItems.add(new LeaderboardItem(username, reviewCount, badgeStatus));
+                    leaderboardItems.add(new LeaderboardItem(currentUser, username, reviewCount, badgeStatus));
                     Log.e("LEADERBOARDITEMS", String.valueOf(leaderboardItems));
                 }
                 Log.e("LEADERBOARDITEMSDONE", String.valueOf(leaderboardItems));
