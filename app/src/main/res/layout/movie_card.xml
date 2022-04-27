@@ -19,13 +19,13 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/reviewCountText"
+                android:id="@+id/movieDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
-                android:text="0 reviews"
+                android:text="Default description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/moviePicCard"
                 app:layout_constraintTop_toBottomOf="@+id/movieTitle" />

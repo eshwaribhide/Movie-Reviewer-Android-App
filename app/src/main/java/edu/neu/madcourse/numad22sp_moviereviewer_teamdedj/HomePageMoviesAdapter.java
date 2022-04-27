@@ -25,12 +25,12 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
     public class MoviesViewHolder extends RecyclerView.ViewHolder {
         public ImageView moviePoster;
         public TextView movieTitle;
-        public TextView reviewCount;
+        public TextView movieDescription;
         public MoviesViewHolder(@NonNull View itemView) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.moviePoster);
             movieTitle = itemView.findViewById(R.id.movieTitle);
-            reviewCount = itemView.findViewById(R.id.reviewCountText);
+            movieDescription = itemView.findViewById(R.id.movieDescription);
         }
     }
 
@@ -48,7 +48,7 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
         // this is a dummy image; will change this
         holder.moviePoster.setImageResource(R.drawable.movie);
         holder.movieTitle.setText(currentMovie.title);
-        holder.reviewCount.setText(currentMovie.reviewCount + " reviews");
+        holder.movieDescription.setText(currentMovie.description);
     }
 
     @Override

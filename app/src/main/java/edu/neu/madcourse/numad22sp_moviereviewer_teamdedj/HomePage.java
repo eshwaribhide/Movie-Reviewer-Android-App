@@ -6,13 +6,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,17 +29,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HomePage extends AppCompatActivity {
     private String currentUser;
+    private final String TAG = "HomePage debug";
+    private final Handler textHandler = new Handler();
 
-    // static data for testing
-    private final MovieCard movie1 = new MovieCard(1, 10, "12 Angry Men", "Description");
-    private final MovieCard movie2 = new MovieCard(2, 5, "21 Jump Street", "Description");
-    private final MovieCard movie3 = new MovieCard(3, 23, "Bohemian Rhapsody", "Description");
-
-    private final ArrayList<MovieCard> movieList = new ArrayList<>(Arrays.asList(movie1, movie2, movie3));
+    private final ArrayList<MovieCard> movieList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView reviewsRecyclerView;
     private RecyclerView.LayoutManager linearLayout;
@@ -46,6 +49,14 @@ public class HomePage extends AppCompatActivity {
     private boolean hasSelectedComedy = false;
     private boolean hasSelectedAction = false;
     private boolean hasSelectedDrama = false;
+    private boolean hasSelectedCrime = false;
+    private boolean hasSelectedAnimation = false;
+    private boolean hasSelectedDocumentary = false;
+    private boolean hasSelectedHistory = false;
+    private boolean hasSelectedHorror = false;
+    private boolean hasSelectedRomance = false;
+    private boolean hasSelectedSciFi = false;
+
     private ArrayList<String> usersFollowing = new ArrayList<>();
     private ArrayList<ReviewCard> relevantReviews = new ArrayList<>();
 
@@ -63,10 +74,22 @@ public class HomePage extends AppCompatActivity {
            if(!task.isSuccessful()) {
                Log.e("firebase", "Error getting data", task.getException());
            } else {
-               // need to do a try/catch here to avoid null pointer exception
-               hasSelectedComedy = (Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue();
-               hasSelectedAction = (Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue();
-               hasSelectedDrama = (Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue();
+               try {
+                   hasSelectedComedy = (Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue();
+                   hasSelectedAction = (Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue();
+                   hasSelectedDrama = (Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue();
+                   hasSelectedAnimation = (Boolean) task.getResult().child("genres").child("animationGenreSelected").getValue();
+                   hasSelectedCrime = (Boolean) task.getResult().child("genres").child("crimeGenreSelected").getValue();
+                   hasSelectedDocumentary = (Boolean) task.getResult().child("genres").child("documentaryGenreSelected").getValue();
+                   hasSelectedHistory= (Boolean) task.getResult().child("genres").child("historyGenreSelected").getValue();
+                   hasSelectedHorror = (Boolean) task.getResult().child("genres").child("horrorGenreSelected").getValue();
+                   hasSelectedRomance = (Boolean) task.getResult().child("genres").child("romanceGenreSelected").getValue();
+                   hasSelectedSciFi = (Boolean) task.getResult().child("genres").child("sciFiGenreSelected").getValue();
+
+                   getDisplayedMovies();
+               } catch (NullPointerException e) {
+                   Log.e("firebase", "Genre error", task.getException());
+               }
            }
         });
 
@@ -86,7 +109,6 @@ public class HomePage extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     Log.e("firebase", "No following child found", task.getException());
                 }
-                System.out.println(usersFollowing);
             }
         });
         createReviewsRecyclerView();
@@ -128,6 +150,96 @@ public class HomePage extends AppCompatActivity {
         initData(savedInstanceState);
     }
 
+    private ArrayList<MovieCard> getDisplayedMovies() {
+        // Get 3 random genres that are liked by user
+        ArrayList<Integer> likedGenres = new ArrayList<>();
+        if (hasSelectedComedy) {
+            likedGenres.add(35);
+        } if (hasSelectedAction) {
+            likedGenres.add(28);
+        } if (hasSelectedDrama) {
+            likedGenres.add(18);
+        }
+        if (hasSelectedCrime) {
+            likedGenres.add(80);
+        }
+        if (hasSelectedAnimation) {
+            likedGenres.add(16);
+        }
+        if (hasSelectedDocumentary) {
+            likedGenres.add(99);
+        }
+        if (hasSelectedHistory) {
+            likedGenres.add(36);
+        }
+        if (hasSelectedHorror) {
+            likedGenres.add(27);
+        }
+        if (hasSelectedRomance) {
+            likedGenres.add(10749);
+        }
+        if (hasSelectedSciFi) {
+            likedGenres.add(878);
+        }
+
+        Random rand = new Random();
+        int randomGenre =  likedGenres.get(rand.nextInt(likedGenres.size()));
+
+        // Make API call
+        String urlStr = "https://api.themoviedb.org/3/discover/movie?api_key=eea1a7fc0d5c72b36736e248dc5e2693&language=en-US&with_genres=" + randomGenre;
+        Thread thread = new Thread(() -> {
+            JSONObject jObject = new JSONObject();
+            try {
+                URL url = new URL(urlStr);
+                Log.e(TAG, urlStr);
+                HttpURLConnection req = (HttpURLConnection) url.openConnection();
+                req.setRequestMethod("GET");
+                req.setDoInput(true);
+                req.connect();
+
+                Scanner s = new Scanner(req.getInputStream()).useDelimiter("\\A");
+                String resp = s.hasNext() ? s.next() : "";
+                jObject = new JSONObject(resp);
+                Log.e("RESPONSE", String.valueOf(jObject));
+                JSONArray jArray = jObject.getJSONArray("results");
+                Log.e("TESTING", "FOUND RESULTS");
+                for (int i = 0; i < Math.min(3, jArray.length()); i++) {
+                    JSONObject result = jArray.getJSONObject(i);
+                    String movieID = result.getString("id");
+                    String posterPath = result.getString("poster_path").contains("/") ? "https://image.tmdb.org/t/p/original" + result.getString("poster_path") : "https://i.imgur.com/HGjprLt.jpeg";
+                    String movieTitle = !result.getString("title").equals("") ? result.getString("title") : "No Title";
+                    Log.e("TITLE", movieTitle);
+                    String releaseDate = !result.getString("release_date").equals("") ? "Released: " + result.getString("release_date") : "No Release Date";
+                    String description = !result.getString("overview").equals("") ? result.getString("overview") : "No description";
+                    Log.e("DESCRIPTION", description);
+                    textHandler.post(() -> addMovieToRecyclerView(movieID, movieTitle, description, releaseDate, posterPath));
+                }
+
+
+            } catch (MalformedURLException e) {
+                Log.e(TAG, "MalformedURLException");
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException");
+                e.printStackTrace();
+            }
+        });
+
+        return null;
+
+    }
+
+    private void addMovieToRecyclerView(String movieId, String movieTitle, String description, String releaseDate, String posterPath) {
+        MovieCard newMovie = new MovieCard(movieId, movieTitle, description, releaseDate, posterPath);
+        movieList.add(0, newMovie);
+        homePageAdapter.notifyItemInserted(0);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
