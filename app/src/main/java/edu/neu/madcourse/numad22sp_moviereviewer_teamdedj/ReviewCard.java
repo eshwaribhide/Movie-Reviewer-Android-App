@@ -12,18 +12,21 @@ public class ReviewCard implements Parcelable {
     public String username;
     public String movieTitle;
     public String reviewTitle;
+    public String reviewDate;
 
-    public ReviewCard(String reviewId, String username, String movieTitle, String reviewTitle) {
+    public ReviewCard(String reviewId, String username, String movieTitle, String reviewTitle, String reviewDate) {
         this.reviewId = reviewId;
         this.username = username;
         this.movieTitle = movieTitle;
         this.reviewTitle = reviewTitle;
+        this.reviewDate = reviewDate;
     }
 
     protected ReviewCard(Parcel in) {
         username = in.readString();
         movieTitle = in.readString();
         reviewTitle = in.readString();
+        reviewDate = in.readString();
     }
 
     public static final Creator<ReviewCard> CREATOR = new Creator<ReviewCard>() {
@@ -48,5 +51,6 @@ public class ReviewCard implements Parcelable {
         parcel.writeString(username);
         parcel.writeString(movieTitle);
         parcel.writeString(reviewTitle);
+        parcel.writeString(reviewDate);
     }
 }

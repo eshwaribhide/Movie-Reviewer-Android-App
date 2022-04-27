@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private String searchedUser;
     private DatabaseReference mDatabase;
     private TextView fullNameValue;
+    private EditText fullNameEdit;
     private TextView usernameValue;
     private TextView followersValue;
     private TextView followingValue;
@@ -43,6 +45,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
     private Button followButton;
     private Button unfollowButton;
     private Button editProfileButton;
+    private Button updateNameButton;
     private boolean isUserFollowingProfile = false;
     private boolean inEditMode = false;
 
@@ -69,6 +72,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         fullNameValue = findViewById(R.id.user_full_name_text);
+        fullNameEdit = findViewById(R.id.user_full_name_edit);
         usernameValue = findViewById(R.id.username_text);
         followersValue = findViewById(R.id.followers_count);
         followingValue = findViewById(R.id.following_count);
@@ -80,6 +84,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         editProfileButton = findViewById(R.id.editProfileButton);
         followButton = findViewById(R.id.followButton);
         unfollowButton = findViewById(R.id.unfollowButton);
+        updateNameButton = findViewById(R.id.update_name_button);
 
         initSavedInstanceState(savedInstanceState);
 
@@ -90,10 +95,17 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
-                    // Get user full name
-                    fullNameValue.setText(String.valueOf(task.getResult().child("fullName").getValue()));
-
-                    // Get username
+                    // Get user full name and render the text view or edit view
+                    String userFullName = String.valueOf(task.getResult().child("fullName").getValue());
+                    if (currentUser.equals(searchedUser)) {
+                        fullNameValue.setVisibility(View.GONE);
+                        fullNameEdit.setVisibility(View.VISIBLE);
+                        fullNameEdit.setText(userFullName);
+                        updateNameButton.setVisibility(View.VISIBLE);
+                    } else {
+                        fullNameValue.setText(userFullName);
+                    }
+                    // Set username text
                     usernameValue.setText(searchedUser);
 
                     // Get count of followers
@@ -135,10 +147,6 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 }
             });
 
-            // Show or hide the follow/unfollow/edit buttons
-//            if (currentUser.equals(searchedUser)) {
-//                editProfileButton.setVisibility(View.VISIBLE);
-//            }
             mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
@@ -175,9 +183,10 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                             try {
                                 String movieTitle = String.valueOf(dschild.child("movieTitle").getValue());
                                 String reviewTitle = String.valueOf(dschild.child("reviewTitle").getValue());
-                                ReviewCard review = new ReviewCard(reviewId, author, movieTitle, reviewTitle);
+                                String reviewDate = dschild.getKey();
+                                ReviewCard review = new ReviewCard(reviewId, author, movieTitle, reviewTitle, reviewDate);
                                 if (movieTitle.equals("null")) {
-                                    review = new ReviewCard(reviewId, author, movieId, reviewTitle);
+                                    review = new ReviewCard(reviewId, author, movieId, reviewTitle, reviewDate);
                                 }
                                 userReviews.add(0, review);
                             } catch (NullPointerException e) {
@@ -232,6 +241,11 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                 } else {
                     followButton.setVisibility(View.VISIBLE);
                 }
+            } else {
+                fullNameValue.setVisibility(View.GONE);
+                fullNameEdit.setVisibility(View.VISIBLE);
+                fullNameEdit.setText(fullNameEdit.getText());
+                updateNameButton.setVisibility(View.VISIBLE);
             }
 
             if (savedInstanceState.containsKey("reviewsLength")) {
@@ -245,8 +259,9 @@ public class ProfilePageV2Activity extends AppCompatActivity {
                         String reviewUsername = savedInstanceState.getString("Author"+key);
                         String reviewTitle = savedInstanceState.getString("ReviewTitle"+key);
                         String movieTitle = savedInstanceState.getString("MovieTitle"+key);
+                        String reviewDate = savedInstanceState.getString("ReviewDate"+key);
 
-                        ReviewCard userReview = new ReviewCard(reviewId, reviewUsername, movieTitle, reviewTitle);
+                        ReviewCard userReview = new ReviewCard(reviewId, reviewUsername, movieTitle, reviewTitle, reviewDate);
                         userReviews.add(userReview);
                     }
                 }
@@ -296,6 +311,17 @@ public class ProfilePageV2Activity extends AppCompatActivity {
         });
     }
 
+    public void updateNameOnClick(View view) {
+        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting user data", task.getException());
+            } else {
+                mDatabase.child("users").child(currentUser).child("fullName").setValue(fullNameEdit.getText().toString());
+                Snackbar.make(view, "Your name has been updated", BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public void toggleEditMode(View view) {
         if (!inEditMode) {
             inEditMode = true;
@@ -333,6 +359,7 @@ public class ProfilePageV2Activity extends AppCompatActivity {
             outState.putString("MovieTitle" + key, userReviews.get(i).movieTitle);
             outState.putString("ReviewTitle" + key, userReviews.get(i).reviewTitle);
             outState.putString("Author" + key, userReviews.get(i).username);
+            outState.putString("ReviewDate" + key, userReviews.get(i).reviewDate);
         }
     }
 
