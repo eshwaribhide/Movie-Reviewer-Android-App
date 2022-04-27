@@ -49,7 +49,27 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
         MovieCard currentMovie = movieList.get(position);
         Picasso.get().load(currentMovie.poster).into(holder.moviePoster);
         holder.movieTitle.setText(currentMovie.title);
-        holder.movieDescription.setText(currentMovie.description);
+
+        // Set a word limit of 20 for description
+        String originalDesc = currentMovie.description;
+        String formattedDesc = getFormattedDescription(originalDesc);
+        holder.movieDescription.setText(formattedDesc);
+    }
+
+    private String getFormattedDescription(String description) {
+        String[] words = description.split("\\s+", 21);
+        int wordCount = words.length;
+
+        if (wordCount <= 20) {
+            return description;
+        } else {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < 20; i++) {
+                result.append(words[i]).append(" ");
+            }
+            result.append("...");
+            return result.toString();
+        }
     }
 
     @Override
