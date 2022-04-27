@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAdapter.MoviesViewHolder> {
@@ -45,8 +47,7 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
         MovieCard currentMovie = movieList.get(position);
-        // this is a dummy image; will change this
-        holder.moviePoster.setImageResource(R.drawable.movie);
+        Picasso.get().load(currentMovie.poster).into(holder.moviePoster);
         holder.movieTitle.setText(currentMovie.title);
         holder.movieDescription.setText(currentMovie.description);
     }

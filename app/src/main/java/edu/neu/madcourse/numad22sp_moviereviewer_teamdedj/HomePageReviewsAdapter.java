@@ -34,9 +34,8 @@ public class HomePageReviewsAdapter extends RecyclerView.Adapter<HomePageReviews
     public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
         ReviewCard currentReview = reviewList.get(position);
         holder.reviewTitle.setText(currentReview.username + " reviewed " + currentReview.movieTitle);
-        holder.reviewPreview.setText("Reviewed on" + currentReview.reviewTitle);
-        holder.reviewDate.setText(currentReview.reviewDate);
-        // set date (need to add date to ReviewCard
+        holder.reviewDate.setText("Reviewed on " + currentReview.reviewDate);
+        holder.reviewPreview.setText(currentReview.reviewTitle);
     }
 
     @Override

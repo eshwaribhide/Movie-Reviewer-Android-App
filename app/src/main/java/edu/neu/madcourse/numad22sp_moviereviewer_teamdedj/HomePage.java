@@ -1,5 +1,6 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,53 +66,57 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         initSavedInstanceState(savedInstanceState);
-        createRecyclerView();
 
-        // Get 5 movies of user's specified genres
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // Find genres
-        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
-           if(!task.isSuccessful()) {
-               Log.e("firebase", "Error getting data", task.getException());
-           } else {
-               try {
-                   hasSelectedComedy = (Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue();
-                   hasSelectedAction = (Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue();
-                   hasSelectedDrama = (Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue();
-                   hasSelectedAnimation = (Boolean) task.getResult().child("genres").child("animationGenreSelected").getValue();
-                   hasSelectedCrime = (Boolean) task.getResult().child("genres").child("crimeGenreSelected").getValue();
-                   hasSelectedDocumentary = (Boolean) task.getResult().child("genres").child("documentaryGenreSelected").getValue();
-                   hasSelectedHistory= (Boolean) task.getResult().child("genres").child("historyGenreSelected").getValue();
-                   hasSelectedHorror = (Boolean) task.getResult().child("genres").child("horrorGenreSelected").getValue();
-                   hasSelectedRomance = (Boolean) task.getResult().child("genres").child("romanceGenreSelected").getValue();
-                   hasSelectedSciFi = (Boolean) task.getResult().child("genres").child("sciFiGenreSelected").getValue();
+        if (savedInstanceState == null) {
+            // Get 5 movies of user's specified genres
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            // Find genres
+            mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+                if(!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    try {
+                        hasSelectedComedy = (Boolean) task.getResult().child("genres").child("comedyGenreSelected").getValue();
+                        hasSelectedAction = (Boolean) task.getResult().child("genres").child("actionGenreSelected").getValue();
+                        hasSelectedDrama = (Boolean) task.getResult().child("genres").child("dramaGenreSelected").getValue();
+                        hasSelectedAnimation = (Boolean) task.getResult().child("genres").child("animationGenreSelected").getValue();
+                        hasSelectedCrime = (Boolean) task.getResult().child("genres").child("crimeGenreSelected").getValue();
+                        hasSelectedDocumentary = (Boolean) task.getResult().child("genres").child("documentaryGenreSelected").getValue();
+                        hasSelectedHistory= (Boolean) task.getResult().child("genres").child("historyGenreSelected").getValue();
+                        hasSelectedHorror = (Boolean) task.getResult().child("genres").child("horrorGenreSelected").getValue();
+                        hasSelectedRomance = (Boolean) task.getResult().child("genres").child("romanceGenreSelected").getValue();
+                        hasSelectedSciFi = (Boolean) task.getResult().child("genres").child("sciFiGenreSelected").getValue();
 
-                   getDisplayedMovies();
-               } catch (NullPointerException e) {
-                   Log.e("firebase", "Genre error", task.getException());
-               }
-           }
-        });
-
-        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                try {
-                    // Not sure if this is the best way to access all users following but it works
-                    Map<String, String> followingObject = (Map<String, String>) task.getResult().child("following").getValue();
-                    followingObject.forEach((key, value) -> {
-                        usersFollowing.add(key);
-                    });
-                    if (usersFollowing.size() > 0) {
-                        getArrayOfReviews();
+                        getDisplayedMovies();
+                    } catch (NullPointerException e) {
+                        Log.e("firebase", "Genre error", task.getException());
                     }
-                } catch (NullPointerException e) {
-                    Log.e("firebase", "No following child found", task.getException());
                 }
-            }
-        });
+            });
+
+            mDatabase.child("users").child(currentUser).get().addOnCompleteListener(task -> {
+                if(!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    try {
+                        // Not sure if this is the best way to access all users following but it works
+                        Map<String, String> followingObject = (Map<String, String>) task.getResult().child("following").getValue();
+                        followingObject.forEach((key, value) -> {
+                            usersFollowing.add(key);
+                        });
+                        if (usersFollowing.size() > 0) {
+                            getArrayOfReviews();
+                        }
+                    } catch (NullPointerException e) {
+                        Log.e("firebase", "No following child found", task.getException());
+                    }
+                }
+            });
+        } else {
+            createRecyclerView();
+        }
         createReviewsRecyclerView();
+
     }
 
     private void createRecyclerView() {
@@ -136,6 +141,44 @@ public class HomePage extends AppCompatActivity {
     private void initData(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey("currentUser")) {
             currentUser = savedInstanceState.getString("currentUser");
+            Log.e("CURRENT_USER", currentUser);
+            if (savedInstanceState.containsKey("moviesCount")) {
+                int size = savedInstanceState.getInt("moviesCount");
+
+                if (movieList == null || movieList.size() == 0) {
+                    for (int i = 0; i < size; i++) {
+                        int keyInt = i+1;
+                        String key = Integer.toString(keyInt);
+                        String movieId = savedInstanceState.getString("MovieId"+key);
+                        String poster = savedInstanceState.getString("MoviePoster"+key);
+                        String title = savedInstanceState.getString("MovieTitle"+key);
+                        String releaseDate = savedInstanceState.getString("ReleaseDate"+key);
+                        String description = savedInstanceState.getString("Description"+key);
+
+                        MovieCard movie = new MovieCard(movieId, title, description, releaseDate, poster);
+                        assert movieList != null;
+                        movieList.add(movie);
+                    }
+                }
+            }
+            if (savedInstanceState.containsKey("reviewsCount")) {
+                int size = savedInstanceState.getInt("reviewsCount");
+
+                if (relevantReviews == null || relevantReviews.size() == 0) {
+                    for (int i = 0; i < size; i++) {
+                        int keyInt = i+1;
+                        String key = Integer.toString(keyInt);
+                        String reviewId = savedInstanceState.getString("ReviewId"+key);
+                        String movieTitle = savedInstanceState.getString("MovieTitle"+key);
+                        String reviewTitle = savedInstanceState.getString("ReviewTitle"+key);
+                        String reviewDate = savedInstanceState.getString("ReviewDate"+key);
+                        String author = savedInstanceState.getString("Author"+key);
+
+                        ReviewCard review = new ReviewCard(reviewId, author, movieTitle, reviewTitle, reviewDate);
+                        relevantReviews.add(review);
+                    }
+                }
+            }
         }
         else {
             Log.e("INITDATA", "INITDATA");
@@ -150,7 +193,7 @@ public class HomePage extends AppCompatActivity {
         initData(savedInstanceState);
     }
 
-    private ArrayList<MovieCard> getDisplayedMovies() {
+    private void getDisplayedMovies() {
         // Get 3 random genres that are liked by user
         ArrayList<Integer> likedGenres = new ArrayList<>();
         if (hasSelectedComedy) {
@@ -187,6 +230,7 @@ public class HomePage extends AppCompatActivity {
 
         // Make API call
         String urlStr = "https://api.themoviedb.org/3/discover/movie?api_key=eea1a7fc0d5c72b36736e248dc5e2693&language=en-US&with_genres=" + randomGenre;
+        Log.e("URL", urlStr);
         Thread thread = new Thread(() -> {
             JSONObject jObject = new JSONObject();
             try {
@@ -202,16 +246,13 @@ public class HomePage extends AppCompatActivity {
                 jObject = new JSONObject(resp);
                 Log.e("RESPONSE", String.valueOf(jObject));
                 JSONArray jArray = jObject.getJSONArray("results");
-                Log.e("TESTING", "FOUND RESULTS");
                 for (int i = 0; i < Math.min(3, jArray.length()); i++) {
                     JSONObject result = jArray.getJSONObject(i);
                     String movieID = result.getString("id");
                     String posterPath = result.getString("poster_path").contains("/") ? "https://image.tmdb.org/t/p/original" + result.getString("poster_path") : "https://i.imgur.com/HGjprLt.jpeg";
                     String movieTitle = !result.getString("title").equals("") ? result.getString("title") : "No Title";
-                    Log.e("TITLE", movieTitle);
                     String releaseDate = !result.getString("release_date").equals("") ? "Released: " + result.getString("release_date") : "No Release Date";
                     String description = !result.getString("overview").equals("") ? result.getString("overview") : "No description";
-                    Log.e("DESCRIPTION", description);
                     textHandler.post(() -> addMovieToRecyclerView(movieID, movieTitle, description, releaseDate, posterPath));
                 }
 
@@ -230,15 +271,14 @@ public class HomePage extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
-        return null;
-
+        thread.start();
     }
 
     private void addMovieToRecyclerView(String movieId, String movieTitle, String description, String releaseDate, String posterPath) {
         MovieCard newMovie = new MovieCard(movieId, movieTitle, description, releaseDate, posterPath);
-        movieList.add(0, newMovie);
-        homePageAdapter.notifyItemInserted(0);
+        Log.e("MOVIE_CARD", movieTitle);
+        movieList.add(newMovie);
+        createRecyclerView();
     }
 
     @Override
@@ -289,7 +329,48 @@ public class HomePage extends AppCompatActivity {
             if (relevantReviews.size() > 0) {
                 createReviewsRecyclerView();
             }
-            System.out.println("Total reviews " + relevantReviews.size());
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("currentUser", currentUser);
+
+        int moviesCount = 0;
+        if (movieList != null) {
+            moviesCount = movieList.size();
+        }
+
+        outState.putInt("moviesCount", moviesCount);
+
+        for (int i = 0; i < moviesCount; i++) {
+            int keyInt = i + 1;
+            String key = Integer.toString(keyInt);
+            outState.putString("MovieId" + key, movieList.get(i).movieId);
+            outState.putString("MoviePoster" + key, movieList.get(i).poster);
+            outState.putString("MovieTitle" + key, movieList.get(i).title);
+            outState.putString("ReleaseDate" + key, movieList.get(i).releaseDate);
+            outState.putString("Description" + key, movieList.get(i).description);
+        }
+
+        int reviewsCount = 0;
+        if (relevantReviews != null) {
+            reviewsCount = relevantReviews.size();
+        }
+
+        outState.putInt("reviewsCount", reviewsCount);
+
+        for (int i = 0; i < reviewsCount; i++) {
+            int keyInt = i + 1;
+            String key = Integer.toString(keyInt);
+            ReviewCard review = relevantReviews.get(i);
+            outState.putString("MovieTitle" + key, review.movieTitle);
+            outState.putString("ReviewTitle" + key, review.reviewTitle);
+            outState.putString("ReviewDate" + key, review.reviewDate);
+            outState.putString("ReviewId" + key, review.reviewId);
+            outState.putString("Author" + key, review.username);
+        }
     }
 }
