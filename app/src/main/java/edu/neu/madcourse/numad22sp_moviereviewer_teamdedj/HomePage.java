@@ -155,7 +155,7 @@ public class HomePage extends AppCompatActivity {
                         String releaseDate = savedInstanceState.getString("ReleaseDate"+key);
                         String description = savedInstanceState.getString("Description"+key);
 
-                        MovieCard movie = new MovieCard(movieId, title, description, releaseDate, poster);
+                        MovieCard movie = new MovieCard(currentUser, movieId, title, description, releaseDate, poster);
                         assert movieList != null;
                         movieList.add(movie);
                     }
@@ -256,7 +256,6 @@ public class HomePage extends AppCompatActivity {
                     textHandler.post(() -> addMovieToRecyclerView(movieID, movieTitle, description, releaseDate, posterPath));
                 }
 
-
             } catch (MalformedURLException e) {
                 Log.e(TAG, "MalformedURLException");
                 e.printStackTrace();
@@ -275,7 +274,7 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void addMovieToRecyclerView(String movieId, String movieTitle, String description, String releaseDate, String posterPath) {
-        MovieCard newMovie = new MovieCard(movieId, movieTitle, description, releaseDate, posterPath);
+        MovieCard newMovie = new MovieCard(currentUser, movieId, movieTitle, description, releaseDate, posterPath);
         Log.e("MOVIE_CARD", movieTitle);
         movieList.add(newMovie);
         createRecyclerView();

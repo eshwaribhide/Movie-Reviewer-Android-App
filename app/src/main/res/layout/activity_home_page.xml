@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Recent Reviews"
+            android:text="Reviews by people you follow"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="20sp"

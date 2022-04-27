@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_moviereviewer_teamdedj;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -28,11 +30,13 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
         public ImageView moviePoster;
         public TextView movieTitle;
         public TextView movieDescription;
+        public CardView movieCardContainer;
         public MoviesViewHolder(@NonNull View itemView) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.moviePoster);
             movieTitle = itemView.findViewById(R.id.movieTitle);
             movieDescription = itemView.findViewById(R.id.movieDescription);
+            movieCardContainer = itemView.findViewById(R.id.movie_card_container);
         }
     }
 
@@ -54,6 +58,18 @@ public class HomePageMoviesAdapter extends RecyclerView.Adapter<HomePageMoviesAd
         String originalDesc = currentMovie.description;
         String formattedDesc = getFormattedDescription(originalDesc);
         holder.movieDescription.setText(formattedDesc);
+
+        holder.movieCardContainer.setOnClickListener(view -> {
+            Intent intent = new Intent(context, MovieDetailsActivity.class);
+            // need current user
+            intent.putExtra("currentUser", movieList.get(position).currentUser);
+            intent.putExtra("movie_id", movieList.get(position).movieId);
+            intent.putExtra("movie_title", movieList.get(position).title);
+            intent.putExtra("movie_poster", movieList.get(position).poster);
+            intent.putExtra("movie_release_date", movieList.get(position).releaseDate);
+            intent.putExtra("movie_description", movieList.get(position).description);
+            context.startActivity(intent);
+        });
     }
 
     private String getFormattedDescription(String description) {
