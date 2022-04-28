@@ -180,10 +180,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         int newReviewCount = reviewCount + 1;
                         if (newReviewCount >=10) {
                             if (newReviewCount >=20) {
-                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Silver");
+                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Gold");
                             }
                             else {
-                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Gold");
+                                mDatabase.child("users").child(currentUser).child("badgeStatus").setValue("Silver");
                             }
                         }
                         mDatabase.child("users").child(currentUser).child("reviewCount").setValue(newReviewCount);
