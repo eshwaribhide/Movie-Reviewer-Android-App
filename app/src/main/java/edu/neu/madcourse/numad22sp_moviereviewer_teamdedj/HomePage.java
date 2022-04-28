@@ -226,6 +226,11 @@ public class HomePage extends AppCompatActivity {
             likedGenres.add(878);
         }
 
+        if (likedGenres.size() ==0) {
+            likedGenres.add(35);
+
+        }
+
         Random rand = new Random();
         int randomGenre =  likedGenres.get(rand.nextInt(likedGenres.size()));
 
